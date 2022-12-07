@@ -1,4 +1,4 @@
-import Test1 from './Test1';
-import Test2 from './Test2';
+import WelcomePage from './WelcomePage';
+import FYCSignInPage from './WelcomePage/FYCSignInPage';
 
-export {Test1, Test2};
+export {WelcomePage, FYCSignInPage};

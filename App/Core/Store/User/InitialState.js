@@ -1,3 +1,4 @@
 export const initialState = {
-  users: null,
+  token: null,
+  fetchUserErrorMessage: null,
 };
