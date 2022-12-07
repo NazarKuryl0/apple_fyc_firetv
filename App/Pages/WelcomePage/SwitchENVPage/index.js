@@ -13,14 +13,17 @@ class SwitchENVPage extends React.Component {
   state = {
     focusedItem: this.props.env,
   };
+
   componentWillUnmount() {
     const {focusedItem} = this.state;
     const {changeClientENV} = this.props;
     changeClientENV(focusedItem);
   }
+
   handleItemFocus = item => {
     this.setState({focusedItem: item});
   };
+
   render() {
     return (
       <View style={styles.root}>

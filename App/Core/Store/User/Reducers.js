@@ -1,18 +1,18 @@
 import {
-  FETCH_FYC_USER_FAILED,
-  FETCH_FYC_USER_SUCCESS,
+  FETCH_USER_FAILED,
+  FETCH_USER_SUCCESS,
   CLEAR_FETCH_FYC_USER_ERROR_MESSAGE,
 } from './Actions';
 import {initialState} from './InitialState';
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_FYC_USER_SUCCESS:
+    case FETCH_USER_SUCCESS:
       return {
         ...state,
         token: action.payload,
       };
-    case FETCH_FYC_USER_FAILED:
+    case FETCH_USER_FAILED:
       return {
         ...state,
         fetchUserErrorMessage: action.payload,

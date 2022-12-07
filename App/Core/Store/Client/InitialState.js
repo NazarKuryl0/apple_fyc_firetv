@@ -4,5 +4,5 @@ export const initialState = {
   env: PROD,
   referer: null,
   baseURL: null,
-  isFYCContent: false,
+  isFYCContent: true,
 };

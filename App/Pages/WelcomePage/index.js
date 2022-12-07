@@ -49,11 +49,15 @@ class WelcomePage extends React.Component {
     if (item === FYC) {
       changeClientReferer(FYC);
       Navigator.navigate('FYCSignInPage');
+    } else if (item === PRESS) {
+      changeClientReferer(PRESS);
+      Navigator.navigate('PRESSSignInEmailPage');
     }
   };
 
   render() {
     const {focusedItem} = this.state;
+    const {isFYCContent} = this.props;
     const descriptionText =
       focusedItem === FYC ? fycDescription : pressDescription;
     return (
@@ -62,7 +66,7 @@ class WelcomePage extends React.Component {
           <Text style={styles.header}>Welcome to Screeners for Apple TV+</Text>
           <Text style={styles.description}>{descriptionText}</Text>
           <TouchableOpacity
-            hasTVPreferredFocus
+            hasTVPreferredFocus={isFYCContent}
             activeOpacity={1}
             ref={ref => (this.FYCButton = ref)}
             onFocus={this.handleItemFocus.bind(this, FYC)}
@@ -81,8 +85,10 @@ class WelcomePage extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={1}
+            hasTVPreferredFocus={!isFYCContent}
             ref={ref => (this.PRESSButton = ref)}
             onFocus={this.handleItemFocus.bind(this, PRESS)}
+            onPress={this.handleItemPress.bind(this, PRESS)}
             style={[
               styles.buttonBlock,
               focusedItem === PRESS && styles.buttonBlockActive,
@@ -118,7 +124,9 @@ class WelcomePage extends React.Component {
   }
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({client}) => ({
+  isFYCContent: client.isFYCContent,
+});
 
 const mapDispatchToProps = dispatch => ({
   changeClientReferer: data => {

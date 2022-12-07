@@ -1,49 +1,46 @@
 import React from 'react';
-import {View, TextInput, Alert} from 'react-native';
+import {TextInput, View, Alert} from 'react-native';
 import {connect} from 'react-redux';
 
+import Navigator from '../../../Core/Services/NavigationService';
 import {
-  FETCH_FYC_USER,
+  FETCH_PRESS_USER,
   CLEAR_FETCH_FYC_USER_ERROR_MESSAGE,
 } from '../../../Core/Store/User/Actions';
-import {SWITCH_ENV_CODE} from '../../../Shared/Constants';
-import Navigator from '../../../Core/Services/NavigationService';
 import {styles} from './styles';
 
-class FYCSignInPage extends React.Component {
+class PRESSSignInPasswordPage extends React.Component {
   state = {
-    code: '',
+    password: '',
   };
 
   handleChangeText = e => {
-    this.setState({code: e});
+    this.setState({password: e});
   };
 
   handleSubmit = () => {
-    const {code} = this.state;
-    const {fetchFYCUser} = this.props;
-    if (code === SWITCH_ENV_CODE) {
-      Navigator.navigate('SwitchENVPage');
-    } else {
-      fetchFYCUser(code);
-    }
+    const {email} = this.props.navigation.state.params;
+    const {password} = this.state;
+    const {fetchPRESSUser} = this.props;
+    fetchPRESSUser(email, password);
   };
 
   handleCloseAlert = () => {
     const {clearFetchFYCErrorMessage} = this.props;
     clearFetchFYCErrorMessage();
+    Navigator.navigate('PRESSSignInEmailPage');
   };
 
   render() {
-    const {code} = this.state;
+    const {password} = this.state;
     const {fetchUserErrorMessage} = this.props;
     return (
       <View style={styles.root}>
         {fetchUserErrorMessage && this.renderErrorModal()}
         <TextInput
           autoFocus
-          value={code}
-          placeholder="Enter Code"
+          value={password}
+          placeholder="Password Requested"
           onChangeText={this.handleChangeText}
           onSubmitEditing={this.handleSubmit}
         />
@@ -67,10 +64,13 @@ const mapStateToProps = ({user}) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchFYCUser: user => {
+  fetchPRESSUser: (email, password) => {
     dispatch({
-      type: FETCH_FYC_USER,
-      payload: user,
+      type: FETCH_PRESS_USER,
+      payload: {
+        email,
+        password,
+      },
     });
   },
   clearFetchFYCErrorMessage: () => {
@@ -80,4 +80,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FYCSignInPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PRESSSignInPasswordPage);
