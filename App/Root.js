@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 
+import {Loader} from './Shared';
 import NavigationService from './Core/Services/NavigationService';
 import AppNavigator from './AppNavigator';
 
@@ -16,6 +17,7 @@ class RootScreen extends Component {
   };
 
   render() {
+    const {isLoading} = this.props;
     return (
       <View style={{flex: 1}}>
         <AppNavigator
@@ -23,12 +25,15 @@ class RootScreen extends Component {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }}
         />
+        {isLoading && <Loader />}
       </View>
     );
   }
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({common}) => ({
+  isLoading: common.isLoading,
+});
 
 const mapDispatchToProps = dispatch => ({});
 

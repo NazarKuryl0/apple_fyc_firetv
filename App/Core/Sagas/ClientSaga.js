@@ -19,8 +19,12 @@ import {
   CHANGE_CLIENT_ENV_SUCCESS,
   CHANGE_CLIENT_REFERER_SUCCESS,
 } from '../Store/Client/Actions';
+import {SHOW_LOADER, HIDE_LOADER} from '../Store/Common/Actions';
 
 export function* changeClientENV({payload}) {
+  yield put({
+    type: SHOW_LOADER,
+  });
   const {
     client: {isFYCContent},
   } = yield select();
@@ -59,9 +63,15 @@ export function* changeClientENV({payload}) {
       referer: referer,
     },
   });
+  yield put({
+    type: HIDE_LOADER,
+  });
 }
 
 export function* changeClientReferer({payload}) {
+  yield put({
+    type: SHOW_LOADER,
+  });
   const {
     client: {env},
   } = yield select();
@@ -99,5 +109,8 @@ export function* changeClientReferer({payload}) {
       baseURL: baseURL,
       isFYCContent: payload === FYC,
     },
+  });
+  yield put({
+    type: HIDE_LOADER,
   });
 }

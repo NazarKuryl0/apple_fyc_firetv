@@ -3,6 +3,7 @@ import FYCSignInPage from './WelcomePage/FYCSignInPage';
 import SwitchENVPage from './WelcomePage/SwitchENVPage';
 import PRESSSignInEmailPage from './WelcomePage/PRESSSignInEmailPage';
 import PRESSSignInPasswordPage from './WelcomePage/PRESSSignInPasswordPage';
+import HomePage from './HomePage';
 
 export {
   WelcomePage,
@@ -10,4 +11,5 @@ export {
   SwitchENVPage,
   PRESSSignInEmailPage,
   PRESSSignInPasswordPage,
+  HomePage,
 };
