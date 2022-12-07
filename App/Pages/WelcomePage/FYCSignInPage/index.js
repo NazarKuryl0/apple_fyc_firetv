@@ -6,6 +6,8 @@ import {
   FETCH_FYC_USER,
   CLEAR_FETCH_FYC_USER_ERROR_MESSAGE,
 } from '../../../Core/Store/User/Actions';
+import {SWITCH_ENV_CODE} from '../../../Shared/Constants';
+import Navigator from '../../../Core/Services/NavigationService';
 import {styles} from './styles';
 
 class FYCSignInPage extends React.Component {
@@ -19,7 +21,11 @@ class FYCSignInPage extends React.Component {
   handleSubmit = () => {
     const {code} = this.state;
     const {fetchFYCUser} = this.props;
-    fetchFYCUser(code);
+    if (code === SWITCH_ENV_CODE) {
+      Navigator.navigate('SwitchENVPage');
+    } else {
+      fetchFYCUser(code);
+    }
   };
   handleCloseAlert = () => {
     const {clearFetchFYCErrorMessage} = this.props;

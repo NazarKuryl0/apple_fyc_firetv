@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, findNodeHandle} from 'react-native';
+import {connect} from 'react-redux';
 
+import {CHANGE_CLIENT_REFERER} from '../../Core/Store/Client/Actions';
 import {FYC, PRESS, LINK} from '../../Shared/Constants';
 import Navigator from '../../Core/Services/NavigationService';
 
@@ -11,7 +13,7 @@ const pressDescription =
 const fycDescription =
   'Access to this app is limited to awards voters and requires a preauthorized code. To start watching, sign in with your access code.';
 
-export default class WelcomePage extends React.Component {
+class WelcomePage extends React.Component {
   state = {
     focusedItem: FYC,
   };
@@ -43,7 +45,9 @@ export default class WelcomePage extends React.Component {
   };
 
   handleItemPress = item => {
+    const {changeClientReferer} = this.props;
     if (item === FYC) {
+      changeClientReferer(FYC);
       Navigator.navigate('FYCSignInPage');
     }
   };
@@ -113,3 +117,16 @@ export default class WelcomePage extends React.Component {
     );
   }
 }
+
+const mapStateToProps = ({}) => ({});
+
+const mapDispatchToProps = dispatch => ({
+  changeClientReferer: data => {
+    dispatch({
+      type: CHANGE_CLIENT_REFERER,
+      payload: data,
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage);

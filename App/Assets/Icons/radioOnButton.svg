@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+	<title>radio-on-button</title>
+	<defs>
+		<image  width="24" height="24" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAFFQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIimcAAAABt0Uk5TABZLf7LmBH36/ynK6LWBXveuIe5bHgFlsxq/CrSn1AAAALZJREFUeJx1UtsWhCAINC/l5CXtnv//oUtbrT0sPHhmgBEEhbiskUobo5VsxNvazuI227XV3zvy+BBj8ARc//iHBOTxwmMG0nDnJ0xzlc8T0lfTOkzLu+AywZ11OuDMX7fdmH1bTw3QUZ8WmchRrqbKQSTDNkICVHctT7uFNCMghYKnnA0/24h6KKERCO01sBMN0MIgEjI1YIhGOtkAexVbnG2XfSA7En6I7Nj5RfGr5T/Dv+/zAVxGD6mNRiRvAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<use id="Background" href="#img1" x="0" y="0" />
+</svg>
