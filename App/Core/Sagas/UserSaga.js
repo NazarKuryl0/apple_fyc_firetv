@@ -10,15 +10,21 @@ import {SHOW_LOADER, HIDE_LOADER} from '../Store/Common/Actions';
 import Navigator from '../Services/NavigationService';
 import {userService} from '../Services/UserService';
 import {FYC, PRESS} from '../../Shared/Constants';
+import Client from '../Services/client';
 
 export function* validateUser() {
   yield put({
     type: SHOW_LOADER,
   });
-  const {user, client} = yield select();
-  const isFYC = client.isFYCContent ? FYC : PRESS;
+  const {user} = yield select();
   const {token} = user;
   if (token) {
+    const {client} = yield select();
+    const {isFYCContent, baseURL, referer} = client;
+    const isFYC = isFYCContent ? FYC : PRESS;
+    Client.defaults.headers.Referer = referer;
+    Client.defaults.headers.Authorization = token;
+    Client.defaults.baseURL = baseURL;
     yield put({
       type: CHANGE_CLIENT_REFERER,
       payload: isFYC,
@@ -48,9 +54,11 @@ export function* fetchFYCUser({payload}) {
       payload: data.message,
     });
   } else {
+    const token = `Token ${data.token}`;
+    Client.defaults.headers.Authorization = token;
     yield put({
       type: FETCH_USER_SUCCESS,
-      payload: `Token ${data.token}`,
+      payload: token,
     });
     Navigator.navigateAndReset('HomePage');
   }
@@ -71,9 +79,11 @@ export function* fetchPRESSUser({payload}) {
       payload: data.message,
     });
   } else {
+    const token = `Token ${data.token}`;
+    Client.defaults.headers.Authorization = token;
     yield put({
       type: FETCH_USER_SUCCESS,
-      payload: `Token ${data.token}`,
+      payload: token,
     });
     Navigator.navigateAndReset('HomePage');
   }

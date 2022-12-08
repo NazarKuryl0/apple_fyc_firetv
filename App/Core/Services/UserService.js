@@ -1,8 +1,8 @@
 // internal
 import client from './client';
 
-function validateUser(authToken) {
-  return client.get('/user/valid/', { headers: { Authorization: authToken } });
+function validateUser() {
+  return client.get('/user/valid/');
 }
 
 function fetchUser(data) {
