@@ -1,4 +1,3 @@
-// internal
 import client from './client';
 
 function validateUser() {

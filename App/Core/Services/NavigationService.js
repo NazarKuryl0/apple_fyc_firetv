@@ -1,4 +1,3 @@
-// external
 import {NavigationActions, StackActions} from 'react-navigation';
 import {Platform} from 'react-native';
 

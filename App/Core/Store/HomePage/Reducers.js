@@ -9,7 +9,7 @@ const reducer = (state = initialState, action) => {
     case FETCH_HOME_PAGE_DATA_SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        content: action.payload,
         fetchHomePageDataError: null,
       };
     case FETCH_HOME_PAGE_DATA_FAILED:

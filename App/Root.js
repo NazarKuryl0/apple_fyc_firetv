@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {Loader} from './Shared';
 import {FYC, PRESS} from './Shared/Constants';
 import {VALIDATE_USER} from './Core/Store/User/Actions';
+import {RESET_LOADER} from './Core/Store/Common/Actions';
 import {
   SET_CLIENT_AUTHORIZATION_HEADER,
   CHANGE_CLIENT_REFERER,
@@ -14,7 +15,8 @@ import AppNavigator from './AppNavigator';
 
 class RootScreen extends Component {
   componentDidMount() {
-    const {token} = this.props;
+    const {token, resetLoader} = this.props;
+    resetLoader();
     if (token) {
       const {
         validateUser,
@@ -71,6 +73,11 @@ const mapDispatchToProps = dispatch => ({
     dispatch({
       type: SET_CLIENT_AUTHORIZATION_HEADER,
       payload: token,
+    });
+  },
+  resetLoader: () => {
+    dispatch({
+      type: RESET_LOADER,
     });
   },
 });
