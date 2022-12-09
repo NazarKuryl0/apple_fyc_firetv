@@ -1,6 +1,7 @@
 import {
   CHANGE_CLIENT_ENV_SUCCESS,
   CHANGE_CLIENT_REFERER_SUCCESS,
+  CLEAR_CLIENT_DATA,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -20,6 +21,8 @@ const reducer = (state = initialState, action) => {
         baseURL: action.payload.baseURL,
         isFYCContent: action.payload.isFYCContent,
       };
+    case CLEAR_CLIENT_DATA:
+      return initialState;
     default:
       return state;
   }

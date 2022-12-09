@@ -114,3 +114,25 @@ export function* changeClientReferer({payload}) {
     type: HIDE_LOADER,
   });
 }
+
+export function* setClientAuthorizationHeader({payload}) {
+  yield put({
+    type: SHOW_LOADER,
+  });
+  client.defaults.headers.Authorization = payload;
+  yield put({
+    type: HIDE_LOADER,
+  });
+}
+
+export function* clearClientData() {
+  yield put({
+    type: SHOW_LOADER,
+  });
+  client.defaults.baseURL = null;
+  client.defaults.headers.Referer = null;
+  client.defaults.headers.Authorization = null;
+  yield put({
+    type: HIDE_LOADER,
+  });
+}

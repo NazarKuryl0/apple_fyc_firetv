@@ -1,3 +1,3 @@
 export const initialState = {
-  isLoading: false,
+  loader: 0,
 };

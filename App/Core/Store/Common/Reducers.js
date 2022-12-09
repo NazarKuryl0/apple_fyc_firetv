@@ -6,12 +6,12 @@ const reducer = (state = initialState, action) => {
     case SHOW_LOADER:
       return {
         ...state,
-        isLoading: true,
+        loader: state.loader + 1,
       };
     case HIDE_LOADER:
       return {
         ...state,
-        isLoading: false,
+        loader: state.loader - 1,
       };
     default:
       return state;

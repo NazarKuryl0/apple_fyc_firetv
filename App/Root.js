@@ -3,7 +3,12 @@ import {View, BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 
 import {Loader} from './Shared';
+import {FYC, PRESS} from './Shared/Constants';
 import {VALIDATE_USER} from './Core/Store/User/Actions';
+import {
+  SET_CLIENT_AUTHORIZATION_HEADER,
+  CHANGE_CLIENT_REFERER,
+} from './Core/Store/Client/Actions';
 import NavigationService from './Core/Services/NavigationService';
 import AppNavigator from './AppNavigator';
 
@@ -11,7 +16,14 @@ class RootScreen extends Component {
   componentDidMount() {
     const {token} = this.props;
     if (token) {
-      const {validateUser} = this.props;
+      const {
+        validateUser,
+        setClientAuthorizationHeader,
+        changeClientReferer,
+        isFYCContent,
+      } = this.props;
+      setClientAuthorizationHeader(token);
+      changeClientReferer(isFYCContent ? FYC : PRESS);
       validateUser();
     }
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack);
@@ -23,7 +35,7 @@ class RootScreen extends Component {
   };
 
   render() {
-    const {isLoading} = this.props;
+    const {loader} = this.props;
     return (
       <View style={{flex: 1}}>
         <AppNavigator
@@ -31,21 +43,34 @@ class RootScreen extends Component {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }}
         />
-        {isLoading && <Loader />}
+        {!!(loader > 0) && <Loader />}
       </View>
     );
   }
 }
 
-const mapStateToProps = ({common, user}) => ({
-  isLoading: common.isLoading,
+const mapStateToProps = ({common, user, client}) => ({
+  loader: common.loader,
   token: user.token,
+  isFYCContent: client.isFYCContent,
 });
 
 const mapDispatchToProps = dispatch => ({
   validateUser: () => {
     dispatch({
       type: VALIDATE_USER,
+    });
+  },
+  changeClientReferer: data => {
+    dispatch({
+      type: CHANGE_CLIENT_REFERER,
+      payload: data,
+    });
+  },
+  setClientAuthorizationHeader: token => {
+    dispatch({
+      type: SET_CLIENT_AUTHORIZATION_HEADER,
+      payload: token,
     });
   },
 });
