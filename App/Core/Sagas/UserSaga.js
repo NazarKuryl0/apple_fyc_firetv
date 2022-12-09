@@ -16,27 +16,24 @@ export function* validateUser() {
   yield put({
     type: SHOW_LOADER,
   });
-  const {user} = yield select();
+  const {user, client} = yield select();
   const {token} = user;
-  if (token) {
-    const {client} = yield select();
-    const {isFYCContent, baseURL, referer} = client;
-    const isFYC = isFYCContent ? FYC : PRESS;
-    Client.defaults.headers.Referer = referer;
-    Client.defaults.headers.Authorization = token;
-    Client.defaults.baseURL = baseURL;
+  const {isFYCContent, baseURL, referer} = client;
+  const isFYC = isFYCContent ? FYC : PRESS;
+  Client.defaults.headers.Referer = referer;
+  Client.defaults.headers.Authorization = token;
+  Client.defaults.baseURL = baseURL;
+  yield put({
+    type: CHANGE_CLIENT_REFERER,
+    payload: isFYC,
+  });
+  const {data} = yield call(() => userService.validateUser());
+  if (data.success) {
+    Navigator.navigateAndReset('HomePage');
+  } else {
     yield put({
-      type: CHANGE_CLIENT_REFERER,
-      payload: isFYC,
+      type: CLEAR_USER_DATA,
     });
-    const {data} = yield call(() => userService.validateUser(token));
-    if (data.success) {
-      Navigator.navigateAndReset('HomePage');
-    } else {
-      yield put({
-        type: CLEAR_USER_DATA,
-      });
-    }
   }
   yield put({
     type: HIDE_LOADER,

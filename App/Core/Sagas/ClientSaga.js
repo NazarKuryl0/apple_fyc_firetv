@@ -83,7 +83,7 @@ export function* changeClientReferer({payload}) {
       referer = FYCRefererPROD;
     } else if (env === INT) {
       baseURL = ConfigRefererINT;
-      referer = FYCRefererPROD;
+      referer = FYCRefererINT;
     } else {
       baseURL = ConfigRefererUAT;
       referer = FYCRefererUAT;

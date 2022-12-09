@@ -3,10 +3,9 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {connect} from 'react-redux';
 
 import {INT, PROD, UAT} from '../../../Shared/Constants';
-import client from '../../../Core/Services/client';
 import {CHANGE_CLIENT_ENV} from '../../../Core/Store/Client/Actions';
-import ButtonOn from '../../../Assets/Icons/radioOnButton.svg';
-import ButtonOff from '../../../Assets/Icons/radioOffButton.svg';
+import ButtonOn from '../../../Assets/Icons/radioOnButton';
+import ButtonOff from '../../../Assets/Icons/radioOffButton';
 import {styles} from './styles';
 
 class SwitchENVPage extends React.Component {

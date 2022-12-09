@@ -9,8 +9,11 @@ import AppNavigator from './AppNavigator';
 
 class RootScreen extends Component {
   componentDidMount() {
-    const {validateUser} = this.props;
-    validateUser();
+    const {token} = this.props;
+    if (token) {
+      const {validateUser} = this.props;
+      validateUser();
+    }
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack);
   }
 
@@ -34,8 +37,9 @@ class RootScreen extends Component {
   }
 }
 
-const mapStateToProps = ({common}) => ({
+const mapStateToProps = ({common, user}) => ({
   isLoading: common.isLoading,
+  token: user.token,
 });
 
 const mapDispatchToProps = dispatch => ({
