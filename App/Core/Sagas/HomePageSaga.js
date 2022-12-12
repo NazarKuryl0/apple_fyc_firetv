@@ -44,9 +44,38 @@ export function* fetchHomePageData() {
         return a.name < b.name ? -1 : 1;
       }
     });
+
+    let allContent = [];
+    dataToDisplay.forEach(item => {
+      item.content.forEach(show => {
+        allContent.push(show);
+      });
+    });
+    let allGenres = [];
+    allContent.forEach(show => {
+      show.genres.forEach(genre => {
+        if (!allGenres.includes(genre)) {
+          allGenres.push(genre);
+        }
+      });
+    });
+    let dataToDisplayWithGenres = [];
+    allGenres.forEach(genre => {
+      let showsWithGenre = allContent.filter(show =>
+        show.genres.includes(genre),
+      );
+      dataToDisplayWithGenres.push({
+        genre,
+        content: showsWithGenre,
+      });
+    });
+
     yield put({
       type: FETCH_HOME_PAGE_DATA_SUCCESS,
-      payload: dataToDisplay,
+      payload: {
+        dataToDisplay,
+        dataToDisplayWithGenres,
+      },
     });
   }
   yield put({
