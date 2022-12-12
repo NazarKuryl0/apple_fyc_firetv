@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
     case FETCH_HOME_PAGE_DATA_FAILED:
       return {
         ...state,
-        data: null,
+        content: null,
         fetchHomePageDataError: action.payload,
       };
     default:

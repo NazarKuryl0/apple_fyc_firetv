@@ -1,6 +1,12 @@
 export const FYC = 'FYC';
 export const PRESS = 'PRESS';
 export const LINK = 'LINK';
+export const ALL = 'All';
+export const CATEGORY = 'Category';
+export const FAQ = 'FAQ';
+export const SIGN_OUT = 'Sign Out';
+export const POWERED_BY = `Powered by Deluxe One.`;
+export const ALL_RIGHTS_RESERVER = `Copyright ${'\u00A9'} ${new Date().getFullYear()} Apple Inc. All rights reserved.`;
 
 export const SWITCH_ENV_CODE = 'switchENV';
 export const INT = 'INT';
