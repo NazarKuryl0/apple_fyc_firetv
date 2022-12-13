@@ -119,7 +119,29 @@ export const styles = StyleSheet.create({
     showName: {
       color: Colors.white,
       textAlign: 'center',
-    }
+    },
+  },
+  faqBlock: {
+    mainBlock: {
+      marginTop: 100,
+      marginBottom: 80,
+    },
+    block: {
+      width: 300,
+      marginRight: 20,
+      padding: 10,
+    },
+    blockActive: {
+      backgroundColor: Colors.lightGray,
+      borderRadius: 20,
+    },
+    questionText: {
+      color: Colors.white,
+      fontWeight: 'bold',
+    },
+    answerText: {
+      color: Colors.white,
+    },
   },
   footerBlock: {
     width: '100%',

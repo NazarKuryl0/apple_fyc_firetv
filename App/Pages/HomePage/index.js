@@ -19,6 +19,8 @@ import {
   SIGN_OUT,
   ALL_RIGHTS_RESERVER,
   POWERED_BY,
+  FAQ_FYC,
+  FAQ_PRESS,
 } from '../../Shared/Constants';
 import {styles} from './styles';
 
@@ -31,12 +33,16 @@ class HomePage extends React.Component {
     focusedHeaderItem: ALL,
     isFocusedHeaderItem: true,
     focusedShow: undefined,
+    focusedShowRef: undefined,
     isSetNativePropsForAllContent: false,
     isSetNativePropsForContentWithGenres: false,
+    isSetNativePropsForFAQ: false,
     focusedGenre: undefined,
     focusedGenreRef: undefined,
     focusedShowInGenres: undefined,
     focusedShowInGenresRef: undefined,
+    focusedFAQQItem: undefined,
+    focusedFAQQItemRef: undefined,
   };
 
   componentDidMount() {
@@ -51,9 +57,20 @@ class HomePage extends React.Component {
     const {
       isSetNativePropsForAllContent,
       isSetNativePropsForContentWithGenres,
+      isSetNativePropsForFAQ,
     } = this.state;
     if (!isSetNativePropsForAllContent && this[`Show03`]) {
       this.setState({isSetNativePropsForAllContent: true});
+      const {focusedShow, focusedShowRef} = this.state;
+      if (!focusedShow) {
+        this[ALL].setNativeProps({
+          nextFocusDown: findNodeHandle(this[`Show00`]),
+        });
+      } else {
+        this[ALL].setNativeProps({
+          nextFocusDown: findNodeHandle(focusedShowRef),
+        });
+      }
       this[`Show03`].setNativeProps({
         nextFocusUp: findNodeHandle(this[ALL]),
       });
@@ -70,11 +87,24 @@ class HomePage extends React.Component {
         nextFocusDown: findNodeHandle(this[`Genre0`]),
       });
     }
+    if (!isSetNativePropsForFAQ && this[`FAQ0`]) {
+      const {focusedFAQQItemRef, focusedFAQQItem} = this.state;
+      this.setState({isSetNativePropsForFAQ: true});
+      if (!focusedFAQQItem) {
+        this[FAQ].setNativeProps({
+          nextFocusDown: findNodeHandle(this[`FAQ0`]),
+        });
+      } else {
+        this[FAQ].setNativeProps({
+          nextFocusDown: findNodeHandle(focusedFAQQItemRef),
+        });
+      }
+    }
   }
 
   render() {
     const {focusedHeaderItem} = this.state;
-    const {content, contentWithGenres} = this.props;
+    const {content, contentWithGenres, isFYCContent} = this.props;
     return (
       <ScrollView
         ref={ref => (this.mainScroll = ref)}
@@ -85,6 +115,8 @@ class HomePage extends React.Component {
         {focusedHeaderItem === CATEGORY &&
           contentWithGenres &&
           this.renderContentWithGenres(contentWithGenres)}
+        {focusedHeaderItem === FAQ &&
+          this.renderFAQContent(isFYCContent ? FAQ_FYC : FAQ_PRESS)}
         {this.renderFooter()}
       </ScrollView>
     );
@@ -93,7 +125,6 @@ class HomePage extends React.Component {
   handleHeaderItemFocus = item => {
     this.setState({
       focusedHeaderItem: item,
-      focusedShow: undefined,
       isFocusedHeaderItem: true,
     });
     if (item === ALL) {
@@ -103,6 +134,8 @@ class HomePage extends React.Component {
         focusedGenreRef: undefined,
         focusedShowInGenres: undefined,
         focusedShowInGenresRef: undefined,
+        focusedFAQQItem: undefined,
+        focusedFAQQItemRef: undefined,
       });
     } else if (item === CATEGORY) {
       const {focusedShowInGenresRef, focusedShowInGenres} = this.state;
@@ -113,6 +146,22 @@ class HomePage extends React.Component {
       } else {
         this.setState({isSetNativePropsForContentWithGenres: false});
       }
+      this.setState({
+        focusedShow: undefined,
+        focusedShowRef: undefined,
+        focusedFAQQItemRef: undefined,
+        focusedFAQQItem: undefined,
+      });
+    } else {
+      this.setState({
+        focusedShow: undefined,
+        focusedShowRef: undefined,
+        isSetNativePropsForFAQ: false,
+        focusedGenre: undefined,
+        focusedGenreRef: undefined,
+        focusedShowInGenres: undefined,
+        focusedShowInGenresRef: undefined,
+      });
     }
   };
 
@@ -190,12 +239,16 @@ class HomePage extends React.Component {
     );
   };
 
-  handleShowFocus = item => {
-    this.setState({focusedShow: item, isFocusedHeaderItem: false});
+  handleShowFocus = (item, ref) => {
+    this.setState({
+      focusedShow: item,
+      isFocusedHeaderItem: false,
+      focusedShowRef: ref,
+    });
   };
 
   renderAllContent = content => {
-    const {focusedShow} = this.state;
+    const {focusedShow, isFocusedHeaderItem} = this.state;
     return (
       <View>
         <Image accessible={false} source={bannerURL} resizeMode="center" />
@@ -213,7 +266,11 @@ class HomePage extends React.Component {
                       (this[`Show${categoryIndex}${itemIndex}`] = ref)
                     }
                     key={item.title_name}
-                    onFocus={this.handleShowFocus.bind(this, item.title_name)}
+                    onFocus={this.handleShowFocus.bind(
+                      this,
+                      item.title_name,
+                      this[`Show${categoryIndex}${itemIndex}`],
+                    )}
                     style={[
                       styles.allContent.itemBlock,
                       itemIndex % 4 === 3 && styles.itemBlockWithoutMargin,
@@ -225,14 +282,15 @@ class HomePage extends React.Component {
                       }}
                       style={[styles.allContent.itemImage]}
                     />
-                    {focusedShow === item.title_name && (
-                      <Text
-                        numberOfLines={2}
-                        accessible={false}
-                        style={styles.allContent.itemText}>
-                        {item.title_name}
-                      </Text>
-                    )}
+                    {focusedShow === item.title_name &&
+                      !isFocusedHeaderItem && (
+                        <Text
+                          numberOfLines={2}
+                          accessible={false}
+                          style={styles.allContent.itemText}>
+                          {item.title_name}
+                        </Text>
+                      )}
                   </TouchableOpacity>
                 ))}
               </View>
@@ -368,6 +426,50 @@ class HomePage extends React.Component {
           })}
         </View>
       </View>
+    );
+  };
+
+  handleFAQItemFocus = (item, ref) => {
+    this.setState({
+      isFocusedHeaderItem: false,
+      focusedFAQQItem: item,
+      focusedFAQQItemRef: ref,
+    });
+  };
+
+  renderFAQContent = content => {
+    const {focusedFAQQItem, isFocusedHeaderItem} = this.state;
+    return (
+      <ScrollView
+        horizontal
+        fadingEdgeLength={100}
+        showsHorizontalScrollIndicator={false}
+        style={styles.faqBlock.mainBlock}>
+        {content.map((item, index) => (
+          <TouchableOpacity
+            ref={ref => (this[`FAQ${index}`] = ref)}
+            style={[
+              styles.faqBlock.block,
+              focusedFAQQItem === item.id &&
+                !isFocusedHeaderItem &&
+                styles.faqBlock.blockActive,
+              index === content.length - 1 && styles.itemBlockWithoutMargin,
+            ]}
+            nextFocusUp={findNodeHandle(this[FAQ])}
+            onFocus={this.handleFAQItemFocus.bind(
+              this,
+              item.id,
+              this[`FAQ${index}`],
+            )}>
+            <Text accessible={false} style={styles.faqBlock.questionText}>
+              {item.question}
+            </Text>
+            <Text accessible={false} style={styles.faqBlock.answerText}>
+              {item.answer}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     );
   };
 }
