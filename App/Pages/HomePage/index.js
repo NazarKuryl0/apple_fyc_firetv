@@ -409,13 +409,15 @@ class HomePage extends React.Component {
           {showsToDisplay.map((show, showIndex) => {
             const showName = show.title_name;
             const indexForNextFocusLeft = !(showIndex % 3);
+            const showsLength = showsToDisplay.length;
             const indexForNextFocusRight =
-              showsToDisplay.length > 2
+              showsLength > 2
                 ? showIndex % 3 === 2
-                : showsToDisplay.length;
-            const needForNextFocusDown =
-              showIndex === showsToDisplay.length - 1;
-            const indexForNextFocusDown = showsToDisplay.length - 1;
+                  ? showIndex
+                  : showIndex + 1
+                : showsLength - 1;
+            const needForNextFocusDown = showsLength < 3;
+            const indexForNextFocusDown = showsLength - 1;
             const needForNextFocusUp = showIndex < 3;
             return (
               <TouchableOpacity
@@ -425,13 +427,16 @@ class HomePage extends React.Component {
                 nextFocusLeft={
                   indexForNextFocusLeft && findNodeHandle(focusedGenreRef)
                 }
-                nextFocusRight={
-                  indexForNextFocusRight &&
-                  findNodeHandle(this[`ShowInGenres${showIndex}`])
-                }
+                nextFocusRight={findNodeHandle(
+                  this[`ShowInGenres${indexForNextFocusRight}`],
+                )}
                 nextFocusDown={
-                  needForNextFocusDown &&
-                  findNodeHandle(this[`ShowInGenres${indexForNextFocusDown}`])
+                  showIndex === showsLength - 1
+                    ? findNodeHandle(this[`ShowInGenres${showIndex}`])
+                    : needForNextFocusDown &&
+                      findNodeHandle(
+                        this[`ShowInGenres${indexForNextFocusDown}`],
+                      )
                 }
                 nextFocusUp={
                   needForNextFocusUp && findNodeHandle(this[CATEGORY])
