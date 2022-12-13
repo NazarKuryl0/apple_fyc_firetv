@@ -321,6 +321,7 @@ class HomePage extends React.Component {
             <FlatList
               data={category.content}
               numColumns={4}
+              initialNumToRender={2}
               contentContainerStyle={styles.allContent.categoryBlock}
               renderItem={e => this.renderItem(e, categoryIndex)}
             />
