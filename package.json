@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "build": "cd android && ./gradlew assembleRelease",
     "ios": "react-native run-ios --simulator \"iPhone 14\" --scheme \"apple_fyc_firetv\"",
     "start": "react-native start",
     "test": "jest",
