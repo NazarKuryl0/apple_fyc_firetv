@@ -37,6 +37,7 @@ class HomePage extends React.Component {
     isSetNativePropsForAllContent: false,
     isSetNativePropsForContentWithGenres: false,
     isSetNativePropsForFAQ: false,
+    isSetNativePropsForSignOut: false,
     focusedGenre: undefined,
     focusedGenreRef: undefined,
     focusedShowInGenres: undefined,
@@ -58,6 +59,7 @@ class HomePage extends React.Component {
       isSetNativePropsForAllContent,
       isSetNativePropsForContentWithGenres,
       isSetNativePropsForFAQ,
+      isSetNativePropsForSignOut,
     } = this.state;
     if (!isSetNativePropsForAllContent && this[`Show03`]) {
       this.setState({isSetNativePropsForAllContent: true});
@@ -100,6 +102,22 @@ class HomePage extends React.Component {
         });
       }
     }
+    if (!isSetNativePropsForSignOut && this[`FAQ0`]) {
+      const {focusedFAQQItemRef} = this.state;
+      this.setState({isSetNativePropsForSignOut: true})
+      if (focusedFAQQItemRef) {
+        this[SIGN_OUT].setNativeProps({
+          nextFocusDown: findNodeHandle(focusedFAQQItemRef),
+        });
+      } else {
+        this[SIGN_OUT].setNativeProps({
+          nextFocusDown: findNodeHandle(this[`FAQ0`]),
+        });
+      }
+      this[SIGN_OUT].setNativeProps({
+        nextFocusRight: findNodeHandle(this[SIGN_OUT]),
+      });
+    }
   }
 
   render() {
@@ -115,7 +133,7 @@ class HomePage extends React.Component {
         {focusedHeaderItem === CATEGORY &&
           contentWithGenres &&
           this.renderContentWithGenres(contentWithGenres)}
-        {focusedHeaderItem === FAQ &&
+        {(focusedHeaderItem === FAQ || focusedHeaderItem === SIGN_OUT) &&
           this.renderFAQContent(isFYCContent ? FAQ_FYC : FAQ_PRESS)}
         {focusedHeaderItem !== CATEGORY && this.renderFooter()}
       </ScrollView>
@@ -154,9 +172,10 @@ class HomePage extends React.Component {
       });
     } else {
       this.setState({
+        isSetNativePropsForFAQ: false,
+        isSetNativePropsForSignOut: false,
         focusedShow: undefined,
         focusedShowRef: undefined,
-        isSetNativePropsForFAQ: false,
         focusedGenre: undefined,
         focusedGenreRef: undefined,
         focusedShowInGenres: undefined,
@@ -208,16 +227,21 @@ class HomePage extends React.Component {
         </View>
 
         <TouchableOpacity
+          ref={ref => (this[SIGN_OUT] = ref)}
           style={[
             styles.headerBlockItem,
-            focusedHeaderItem === SIGN_OUT && styles.headerBlockItemActive,
+            focusedHeaderItem === SIGN_OUT &&
+              isFocusedHeaderItem &&
+              styles.headerBlockItemActive,
           ]}
           onFocus={this.handleHeaderItemFocus.bind(this, SIGN_OUT)}>
           <Text
             accessible={false}
             style={[
               styles.headerBlockText,
-              focusedHeaderItem === SIGN_OUT && styles.headerBlockTextActive,
+              focusedHeaderItem === SIGN_OUT &&
+                isFocusedHeaderItem &&
+                styles.headerBlockTextActive,
             ]}>
             {SIGN_OUT}
           </Text>
