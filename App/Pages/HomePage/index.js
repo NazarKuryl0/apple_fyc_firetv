@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   findNodeHandle,
+  FlatList,
 } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -274,57 +275,57 @@ class HomePage extends React.Component {
     });
   };
 
-  renderAllContent = content => {
+  renderItem = ({item, index}, categoryIndex) => {
     const {focusedShow, isFocusedHeaderItem} = this.state;
+    return (
+      <TouchableOpacity
+        activeOpacity={1}
+        ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
+        onFocus={this.handleShowFocus.bind(
+          this,
+          item.title_name,
+          this[`Show${categoryIndex}${index}`],
+        )}
+        style={[
+          styles.allContent.itemBlock,
+          index % 4 === 3 && styles.itemBlockWithoutMargin,
+        ]}>
+        <Image
+          resizeMode="contain"
+          source={{
+            uri: item.images.thumb,
+          }}
+          style={[styles.allContent.itemImage]}
+        />
+        {focusedShow === item.title_name && !isFocusedHeaderItem && (
+          <Text
+            numberOfLines={2}
+            accessible={false}
+            style={styles.allContent.itemText}>
+            {item.title_name}
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
+
+  renderAllContent = content => {
     return (
       <View>
         <Image accessible={false} source={bannerURL} resizeMode="center" />
-        {content.map((category, categoryIndex) => {
-          const categoryName = category.name;
-          return (
-            <View key={categoryName}>
-              <Text accessible={false} style={styles.allContent.headerText}>
-                {categoryName}
-              </Text>
-              <View style={styles.allContent.categoryBlock}>
-                {category.content.map((item, itemIndex) => (
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    ref={ref =>
-                      (this[`Show${categoryIndex}${itemIndex}`] = ref)
-                    }
-                    key={item.title_name}
-                    onFocus={this.handleShowFocus.bind(
-                      this,
-                      item.title_name,
-                      this[`Show${categoryIndex}${itemIndex}`],
-                    )}
-                    style={[
-                      styles.allContent.itemBlock,
-                      itemIndex % 4 === 3 && styles.itemBlockWithoutMargin,
-                    ]}>
-                    <Image
-                      resizeMode="contain"
-                      source={{
-                        uri: item.images.thumb,
-                      }}
-                      style={[styles.allContent.itemImage]}
-                    />
-                    {focusedShow === item.title_name &&
-                      !isFocusedHeaderItem && (
-                        <Text
-                          numberOfLines={2}
-                          accessible={false}
-                          style={styles.allContent.itemText}>
-                          {item.title_name}
-                        </Text>
-                      )}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          );
-        })}
+        {content.map((category, categoryIndex) => (
+          <View key={category.name}>
+            <Text accessible={false} style={styles.allContent.headerText}>
+              {category.name}
+            </Text>
+            <FlatList
+              data={category.content}
+              numColumns={4}
+              contentContainerStyle={styles.allContent.categoryBlock}
+              renderItem={e => this.renderItem(e, categoryIndex)}
+            />
+          </View>
+        ))}
       </View>
     );
   };

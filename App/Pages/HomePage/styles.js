@@ -54,8 +54,7 @@ export const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     categoryBlock: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
+      width: '100%',
     },
     itemBlock: {
       height: (210 * 9) / 16 + 40,
