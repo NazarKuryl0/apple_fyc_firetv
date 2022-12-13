@@ -117,7 +117,7 @@ class HomePage extends React.Component {
           this.renderContentWithGenres(contentWithGenres)}
         {focusedHeaderItem === FAQ &&
           this.renderFAQContent(isFYCContent ? FAQ_FYC : FAQ_PRESS)}
-        {this.renderFooter()}
+        {focusedHeaderItem !== CATEGORY && this.renderFooter()}
       </ScrollView>
     );
   }
@@ -301,14 +301,18 @@ class HomePage extends React.Component {
     );
   };
 
-  handleGenreFocus = (item, ref) => {
+  handleGenreFocus = (item, ref, isLastItem) => {
     this.setState({
       isFocusedHeaderItem: false,
       focusedGenre: item,
       focusedShowInGenres: undefined,
       focusedGenreRef: ref,
     });
-    this.mainScroll.scrollTo({y: 0, animated: true});
+    if (isLastItem) {
+      this.mainScroll.scrollToEnd({animated: true});
+    } else {
+      this.mainScroll.scrollTo({y: 0, animated: true});
+    }
   };
 
   handleShowFocusInGenres = (item, ref) => {
@@ -335,6 +339,7 @@ class HomePage extends React.Component {
         <View style={styles.genresBlock.genresBlock}>
           {contentWithGenres.map((item, index) => {
             const genre = item.genre;
+            const isLastItem = index === contentWithGenres.length - 1;
             return (
               <TouchableOpacity
                 ref={ref => (this[`Genre${index}`] = ref)}
@@ -343,6 +348,7 @@ class HomePage extends React.Component {
                   this,
                   genre,
                   this[`Genre${index}`],
+                  isLastItem,
                 )}
                 style={[
                   styles.genresBlock.genreBlock,
@@ -369,6 +375,7 @@ class HomePage extends React.Component {
               </TouchableOpacity>
             );
           })}
+          <View style={{marginTop: 50}}>{this.renderFooter()}</View>
         </View>
         <View style={styles.genresBlock.showsBlock}>
           {showsToDisplay.map((show, showIndex) => {
