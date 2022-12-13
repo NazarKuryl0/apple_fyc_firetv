@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.black,
-    padding: 20,
+    padding: 40,
   },
   headerBlock: {
     flexDirection: 'row',
@@ -58,13 +58,13 @@ export const styles = StyleSheet.create({
       flexWrap: 'wrap',
     },
     itemBlock: {
-      height: (220 * 9) / 16 + 40,
-      width: 220,
+      height: (210 * 9) / 16 + 40,
+      width: 210,
       marginRight: 40 / 3,
     },
     itemImage: {
       width: '100%',
-      height: (220 * 9) / 16,
+      height: (210 * 9) / 16,
       borderRadius: 10,
     },
     itemText: {
@@ -107,13 +107,13 @@ export const styles = StyleSheet.create({
       flexWrap: 'wrap',
     },
     showBlock: {
-      width: 185,
-      height: (185 * 9) / 16 + 40,
+      width: 170,
+      height: (170 * 9) / 16 + 40,
       marginRight: 20,
     },
     showImage: {
       width: '100%',
-      height: (185 * 9) / 16,
+      height: (170 * 9) / 16,
       borderRadius: 10,
     },
     showName: {
@@ -144,9 +144,10 @@ export const styles = StyleSheet.create({
     },
   },
   footerBlock: {
+    marginTop: 10,
     width: '100%',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 50,
   },
   footerText: {
     color: Colors.dimGray,

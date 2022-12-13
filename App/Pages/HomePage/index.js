@@ -126,6 +126,7 @@ class HomePage extends React.Component {
     return (
       <ScrollView
         ref={ref => (this.mainScroll = ref)}
+        showsVerticalScrollIndicator={false}
         style={styles.root}
         fadingEdgeLength={100}>
         {this.renderHeader()}
@@ -135,7 +136,7 @@ class HomePage extends React.Component {
           this.renderContentWithGenres(contentWithGenres)}
         {(focusedHeaderItem === FAQ || focusedHeaderItem === SIGN_OUT) &&
           this.renderFAQContent(isFYCContent ? FAQ_FYC : FAQ_PRESS)}
-        {focusedHeaderItem !== CATEGORY && this.renderFooter()}
+        {this.renderFooter()}
       </ScrollView>
     );
   }
@@ -366,7 +367,7 @@ class HomePage extends React.Component {
         <View style={styles.genresBlock.genresBlock}>
           {contentWithGenres.map((item, index) => {
             const genre = item.genre;
-            const isLastItem = index === contentWithGenres.length - 1;
+            const isLastItem = index > contentWithGenres.length - 5;
             return (
               <TouchableOpacity
                 activeOpacity={1}
@@ -403,7 +404,6 @@ class HomePage extends React.Component {
               </TouchableOpacity>
             );
           })}
-          <View style={{marginTop: 50}}>{this.renderFooter()}</View>
         </View>
         <View style={styles.genresBlock.showsBlock}>
           {showsToDisplay.map((show, showIndex) => {
