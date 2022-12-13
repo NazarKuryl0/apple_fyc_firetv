@@ -42,7 +42,9 @@ class SwitchENVPage extends React.Component {
         onFocus={this.handleItemFocus.bind(this, item)}
         style={styles.itemBlock}>
         {focusedItem === item ? <ButtonOn /> : <ButtonOff />}
-        <Text style={styles.itemText}>{item}</Text>
+        <Text accessible={false} style={styles.itemText}>
+          {item}
+        </Text>
       </TouchableOpacity>
     );
   };

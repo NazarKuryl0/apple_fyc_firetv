@@ -63,8 +63,12 @@ class WelcomePage extends React.Component {
     return (
       <View style={styles.root}>
         <View style={styles.main}>
-          <Text style={styles.header}>Welcome to Screeners for Apple TV+</Text>
-          <Text style={styles.description}>{descriptionText}</Text>
+          <Text accessible={false} style={styles.header}>
+            Welcome to Screeners for Apple TV+
+          </Text>
+          <Text accessible={false} style={styles.description}>
+            {descriptionText}
+          </Text>
           <TouchableOpacity
             hasTVPreferredFocus={isFYCContent}
             activeOpacity={1}
@@ -76,6 +80,7 @@ class WelcomePage extends React.Component {
               focusedItem === FYC && styles.buttonBlockActive,
             ]}>
             <Text
+              accessible={false}
               style={[
                 styles.buttonText,
                 focusedItem === FYC && styles.buttonTextActive,
@@ -94,6 +99,7 @@ class WelcomePage extends React.Component {
               focusedItem === PRESS && styles.buttonBlockActive,
             ]}>
             <Text
+              accessible={false}
               style={[
                 styles.buttonText,
                 focusedItem === PRESS && styles.buttonTextActive,
@@ -102,13 +108,15 @@ class WelcomePage extends React.Component {
             </Text>
           </TouchableOpacity>
           <View style={styles.bottomBlock}>
-            <Text style={styles.bottomText}>
+            <Text accessible={false} style={styles.bottomText}>
               Looking for Apple TV+ for everyone?{' '}
             </Text>
             <TouchableOpacity
+              activeOpacity={1}
               ref={ref => (this.link = ref)}
               onFocus={this.handleItemFocus.bind(this, LINK)}>
               <Text
+                accessible={false}
                 style={[
                   styles.bottomText,
                   styles.link,

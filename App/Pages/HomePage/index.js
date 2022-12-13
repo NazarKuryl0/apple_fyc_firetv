@@ -104,7 +104,7 @@ class HomePage extends React.Component {
     }
     if (!isSetNativePropsForSignOut && this[`FAQ0`]) {
       const {focusedFAQQItemRef} = this.state;
-      this.setState({isSetNativePropsForSignOut: true})
+      this.setState({isSetNativePropsForSignOut: true});
       if (focusedFAQQItemRef) {
         this[SIGN_OUT].setNativeProps({
           nextFocusDown: findNodeHandle(focusedFAQQItemRef),
@@ -195,6 +195,7 @@ class HomePage extends React.Component {
           {centerHeaderItems.map(item => {
             return (
               <TouchableOpacity
+                activeOpacity={1}
                 key={item}
                 ref={ref => (this[item] = ref)}
                 hasTVPreferredFocus={item === ALL}
@@ -227,6 +228,7 @@ class HomePage extends React.Component {
         </View>
 
         <TouchableOpacity
+          activeOpacity={1}
           ref={ref => (this[SIGN_OUT] = ref)}
           style={[
             styles.headerBlockItem,
@@ -286,6 +288,7 @@ class HomePage extends React.Component {
               <View style={styles.allContent.categoryBlock}>
                 {category.content.map((item, itemIndex) => (
                   <TouchableOpacity
+                    activeOpacity={1}
                     ref={ref =>
                       (this[`Show${categoryIndex}${itemIndex}`] = ref)
                     }
@@ -366,6 +369,7 @@ class HomePage extends React.Component {
             const isLastItem = index === contentWithGenres.length - 1;
             return (
               <TouchableOpacity
+                activeOpacity={1}
                 ref={ref => (this[`Genre${index}`] = ref)}
                 key={genre}
                 onFocus={this.handleGenreFocus.bind(
@@ -415,6 +419,7 @@ class HomePage extends React.Component {
             const needForNextFocusUp = showIndex < 3;
             return (
               <TouchableOpacity
+                activeOpacity={1}
                 key={showName}
                 ref={ref => (this[`ShowInGenres${showIndex}`] = ref)}
                 nextFocusLeft={
@@ -478,6 +483,7 @@ class HomePage extends React.Component {
         style={styles.faqBlock.mainBlock}>
         {content.map((item, index) => (
           <TouchableOpacity
+            activeOpacity={1}
             ref={ref => (this[`FAQ${index}`] = ref)}
             style={[
               styles.faqBlock.block,
