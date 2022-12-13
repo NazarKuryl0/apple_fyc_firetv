@@ -29,8 +29,14 @@ const centerHeaderItems = [ALL, CATEGORY, FAQ];
 class HomePage extends React.Component {
   state = {
     focusedHeaderItem: ALL,
-    focusedFilm: undefined,
-    isSetNativeProps: false,
+    isFocusedHeaderItem: true,
+    focusedShow: undefined,
+    isSetNativePropsForAllContent: false,
+    isSetNativePropsForContentWithGenres: false,
+    focusedGenre: undefined,
+    focusedGenreRef: undefined,
+    focusedShowInGenres: undefined,
+    focusedShowInGenresRef: undefined,
   };
 
   componentDidMount() {
@@ -42,9 +48,12 @@ class HomePage extends React.Component {
   }
 
   componentDidUpdate() {
-    const {isSetNativeProps} = this.state;
-    if (!isSetNativeProps && this[`Show03`]) {
-      this.setState({isSetNativeProps: true});
+    const {
+      isSetNativePropsForAllContent,
+      isSetNativePropsForContentWithGenres,
+    } = this.state;
+    if (!isSetNativePropsForAllContent && this[`Show03`]) {
+      this.setState({isSetNativePropsForAllContent: true});
       this[`Show03`].setNativeProps({
         nextFocusUp: findNodeHandle(this[ALL]),
       });
@@ -52,11 +61,20 @@ class HomePage extends React.Component {
         nextFocusUp: findNodeHandle(this[ALL]),
       });
     }
+    if (!isSetNativePropsForContentWithGenres && this[`Genre0`]) {
+      this.setState({isSetNativePropsForContentWithGenres: true});
+      this[`Genre0`].setNativeProps({
+        nextFocusUp: findNodeHandle(this[CATEGORY]),
+      });
+      this[CATEGORY].setNativeProps({
+        nextFocusDown: findNodeHandle(this[`Genre0`]),
+      });
+    }
   }
 
   render() {
     const {focusedHeaderItem} = this.state;
-    const {content} = this.props;
+    const {content, contentWithGenres} = this.props;
     return (
       <ScrollView
         ref={ref => (this.mainScroll = ref)}
@@ -64,17 +82,42 @@ class HomePage extends React.Component {
         fadingEdgeLength={100}>
         {this.renderHeader()}
         {focusedHeaderItem === ALL && content && this.renderAllContent(content)}
+        {focusedHeaderItem === CATEGORY &&
+          contentWithGenres &&
+          this.renderContentWithGenres(contentWithGenres)}
         {this.renderFooter()}
       </ScrollView>
     );
   }
 
   handleHeaderItemFocus = item => {
-    this.setState({focusedHeaderItem: item, focusedFilm: null});
+    this.setState({
+      focusedHeaderItem: item,
+      focusedShow: undefined,
+      isFocusedHeaderItem: true,
+    });
+    if (item === ALL) {
+      this.setState({
+        isSetNativePropsForAllContent: false,
+        focusedGenre: undefined,
+        focusedGenreRef: undefined,
+        focusedShowInGenres: undefined,
+        focusedShowInGenresRef: undefined,
+      });
+    } else if (item === CATEGORY) {
+      const {focusedShowInGenresRef, focusedShowInGenres} = this.state;
+      if (focusedShowInGenresRef && focusedShowInGenres) {
+        this[CATEGORY].setNativeProps({
+          nextFocusDown: findNodeHandle(focusedShowInGenresRef),
+        });
+      } else {
+        this.setState({isSetNativePropsForContentWithGenres: false});
+      }
+    }
   };
 
   renderHeader = () => {
-    const {focusedHeaderItem, focusedFilm} = this.state;
+    const {focusedHeaderItem, isFocusedHeaderItem} = this.state;
     const {isFYCContent} = this.props;
     return (
       <View style={styles.headerBlock}>
@@ -89,9 +132,11 @@ class HomePage extends React.Component {
                 hasTVPreferredFocus={item === ALL}
                 style={[
                   styles.headerBlockItem,
-                  focusedHeaderItem === item && styles.headerBlockItemActive,
                   focusedHeaderItem === item &&
-                    focusedFilm &&
+                    isFocusedHeaderItem &&
+                    styles.headerBlockItemActive,
+                  focusedHeaderItem === item &&
+                    !isFocusedHeaderItem &&
                     styles.headerBlockItemActiveSection,
                 ]}
                 onFocus={this.handleHeaderItemFocus.bind(this, item)}>
@@ -99,9 +144,11 @@ class HomePage extends React.Component {
                   accessible={false}
                   style={[
                     styles.headerBlockText,
-                    focusedHeaderItem === item && styles.headerBlockTextActive,
                     focusedHeaderItem === item &&
-                      focusedFilm &&
+                      isFocusedHeaderItem &&
+                      styles.headerBlockTextActive,
+                    focusedHeaderItem === item &&
+                      !isFocusedHeaderItem &&
                       styles.headerBlockTextActiveSection,
                   ]}>
                   {item}
@@ -143,12 +190,12 @@ class HomePage extends React.Component {
     );
   };
 
-  handleFilmFocus = item => {
-    this.setState({focusedFilm: item});
+  handleShowFocus = item => {
+    this.setState({focusedShow: item, isFocusedHeaderItem: false});
   };
 
   renderAllContent = content => {
-    const {focusedFilm} = this.state;
+    const {focusedShow} = this.state;
     return (
       <View>
         <Image accessible={false} source={bannerURL} resizeMode="center" />
@@ -166,11 +213,10 @@ class HomePage extends React.Component {
                       (this[`Show${categoryIndex}${itemIndex}`] = ref)
                     }
                     key={item.title_name}
-                    onFocus={this.handleFilmFocus.bind(this, item.title_name)}
+                    onFocus={this.handleShowFocus.bind(this, item.title_name)}
                     style={[
                       styles.allContent.itemBlock,
-                      itemIndex % 4 === 3 &&
-                        styles.allContent.itemBlockWithoutMargin,
+                      itemIndex % 4 === 3 && styles.itemBlockWithoutMargin,
                     ]}>
                     <Image
                       resizeMode="contain"
@@ -179,7 +225,7 @@ class HomePage extends React.Component {
                       }}
                       style={[styles.allContent.itemImage]}
                     />
-                    {focusedFilm === item.title_name && (
+                    {focusedShow === item.title_name && (
                       <Text
                         numberOfLines={2}
                         accessible={false}
@@ -196,10 +242,139 @@ class HomePage extends React.Component {
       </View>
     );
   };
+
+  handleGenreFocus = (item, ref) => {
+    this.setState({
+      isFocusedHeaderItem: false,
+      focusedGenre: item,
+      focusedShowInGenres: undefined,
+      focusedGenreRef: ref,
+    });
+    this.mainScroll.scrollTo({y: 0, animated: true});
+  };
+
+  handleShowFocusInGenres = (item, ref) => {
+    this.setState({
+      focusedShowInGenres: item,
+      focusedShowInGenresRef: ref,
+      isFocusedHeaderItem: false,
+    });
+  };
+
+  renderContentWithGenres = contentWithGenres => {
+    const {
+      focusedGenre,
+      focusedShowInGenres,
+      focusedGenreRef,
+      isFocusedHeaderItem,
+    } = this.state;
+    const showsToDisplay = !focusedGenre
+      ? contentWithGenres[0].content
+      : contentWithGenres.filter(item => item.genre === focusedGenre)[0]
+          .content;
+    return (
+      <View style={styles.genresBlock.mainBlock}>
+        <View style={styles.genresBlock.genresBlock}>
+          {contentWithGenres.map((item, index) => {
+            const genre = item.genre;
+            return (
+              <TouchableOpacity
+                ref={ref => (this[`Genre${index}`] = ref)}
+                key={genre}
+                onFocus={this.handleGenreFocus.bind(
+                  this,
+                  genre,
+                  this[`Genre${index}`],
+                )}
+                style={[
+                  styles.genresBlock.genreBlock,
+                  focusedGenre === genre &&
+                    !isFocusedHeaderItem &&
+                    styles.genresBlock.genreBlockActive,
+                  focusedGenre === genre &&
+                    focusedShowInGenres &&
+                    styles.genresBlock.genreBlockActiveSection,
+                ]}>
+                <Text
+                  accessible={false}
+                  style={[
+                    styles.genresBlock.genreText,
+                    focusedGenre === genre &&
+                      !isFocusedHeaderItem &&
+                      styles.genresBlock.genreTextActive,
+                    focusedGenre === genre &&
+                      focusedShowInGenres &&
+                      styles.genresBlock.genreText,
+                  ]}>
+                  {genre}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+        <View style={styles.genresBlock.showsBlock}>
+          {showsToDisplay.map((show, showIndex) => {
+            const showName = show.title_name;
+            const indexForNextFocusLeft = !(showIndex % 3);
+            const indexForNextFocusRight =
+              showsToDisplay.length > 2
+                ? showIndex % 3 === 2
+                : showsToDisplay.length;
+            const needForNextFocusDown =
+              showIndex === showsToDisplay.length - 1;
+            const indexForNextFocusDown = showsToDisplay.length - 1;
+            const needForNextFocusUp = showIndex < 3;
+            return (
+              <TouchableOpacity
+                key={showName}
+                ref={ref => (this[`ShowInGenres${showIndex}`] = ref)}
+                nextFocusLeft={
+                  indexForNextFocusLeft && findNodeHandle(focusedGenreRef)
+                }
+                nextFocusRight={
+                  indexForNextFocusRight &&
+                  findNodeHandle(this[`ShowInGenres${showIndex}`])
+                }
+                nextFocusDown={
+                  needForNextFocusDown &&
+                  findNodeHandle(this[`ShowInGenres${indexForNextFocusDown}`])
+                }
+                nextFocusUp={
+                  needForNextFocusUp && findNodeHandle(this[CATEGORY])
+                }
+                onFocus={this.handleShowFocusInGenres.bind(
+                  this,
+                  showName,
+                  this[`ShowInGenres${showIndex}`],
+                )}
+                style={[
+                  styles.genresBlock.showBlock,
+                  showIndex % 3 === 2 && styles.itemBlockWithoutMargin,
+                ]}>
+                <Image
+                  resizeMode="contain"
+                  source={{
+                    uri: show.images.thumb,
+                  }}
+                  style={styles.genresBlock.showImage}
+                />
+                {focusedShowInGenres === showName && !isFocusedHeaderItem && (
+                  <Text style={styles.genresBlock.showName} accessible={false}>
+                    {showName}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
+  };
 }
 
 const mapStateToProps = ({home, client}) => ({
   content: home.content,
+  contentWithGenres: home.contentWithGenres,
   isFYCContent: client.isFYCContent,
 });
 
