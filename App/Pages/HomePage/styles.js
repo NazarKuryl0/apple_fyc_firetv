@@ -6,11 +6,11 @@ export const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.black,
-    padding: 40,
   },
   headerBlock: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding: 40,
   },
   headerCenterBlock: {
     width: 300,
@@ -52,9 +52,12 @@ export const styles = StyleSheet.create({
       color: Colors.white,
       fontSize: 20,
       fontWeight: 'bold',
+      paddingHorizontal: 40,
     },
     categoryBlock: {
       width: '100%',
+      paddingTop: 10,
+      paddingHorizontal: 40,
     },
     itemBlock: {
       height: (210 * 9) / 16 + 40,

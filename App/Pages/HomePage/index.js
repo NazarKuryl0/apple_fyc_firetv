@@ -7,6 +7,8 @@ import {
   ScrollView,
   findNodeHandle,
   FlatList,
+  Animated,
+  Easing,
 } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -40,6 +42,7 @@ class HomePage extends React.Component {
   state = {
     focusedHeaderItem: ALL,
     isFocusedHeaderItem: true,
+    scaleValue: new Animated.Value(0),
     focusedShow: undefined,
     focusedShowRef: undefined,
     isSetNativePropsForAllContent: false,
@@ -276,12 +279,29 @@ class HomePage extends React.Component {
     );
   };
 
+  handleBlur = () => {
+    const {scaleValue} = this.state;
+    Animated.timing(scaleValue, {
+      toValue: 0,
+      duration: 200,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  };
+
   handleShowFocus = (item, ref) => {
+    const {scaleValue} = this.state;
     this.setState({
       focusedShow: item,
       isFocusedHeaderItem: false,
       focusedShowRef: ref,
     });
+    Animated.timing(scaleValue, {
+      toValue: 1,
+      duration: 200,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
   };
 
   handleShowPress = (slug, showBackground) => {
@@ -295,6 +315,12 @@ class HomePage extends React.Component {
   renderItem = ({item, index}, categoryIndex) => {
     const {focusedShow, isFocusedHeaderItem} = this.state;
     const {needUpdateHomePageData, showSlug} = this.props;
+    const {scaleValue} = this.state;
+    const cardScale = scaleValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 1.05],
+    });
+    let transformStyle = {transform: [{scale: cardScale}]};
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -305,17 +331,21 @@ class HomePage extends React.Component {
           item.title_name,
           this[`Show${categoryIndex}${index}`],
         )}
+        onBlur={this.handleBlur}
         onPress={this.handleShowPress.bind(this, item.slug, item.images.image)}
         style={[
           styles.allContent.itemBlock,
           index % 4 === 3 && styles.itemBlockWithoutMargin,
         ]}>
-        <Image
+        <Animated.Image
           resizeMode="contain"
           source={{
             uri: `${item.images.thumb}${styles.allContent.itemBlock.width}`,
           }}
-          style={[styles.allContent.itemImage]}
+          style={[
+            styles.allContent.itemImage,
+            focusedShow === item.title_name && transformStyle,
+          ]}
         />
         {focusedShow === item.title_name && !isFocusedHeaderItem && (
           <Text
