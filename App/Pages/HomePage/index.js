@@ -402,11 +402,18 @@ class HomePage extends React.Component {
   };
 
   handleShowFocusInGenres = (item, ref) => {
+    const {scaleValue} = this.state;
     this.setState({
       focusedShowInGenres: item,
       focusedShowInGenresRef: ref,
       isFocusedHeaderItem: false,
     });
+    Animated.timing(scaleValue, {
+      toValue: 1,
+      duration: ANIMATION_DURATION,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
   };
 
   renderContentWithGenres = contentWithGenres => {
@@ -420,6 +427,12 @@ class HomePage extends React.Component {
       ? contentWithGenres[0].content
       : contentWithGenres.filter(item => item.genre === focusedGenre)[0]
           .content;
+    const {scaleValue} = this.state;
+    const cardScale = scaleValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 1.05],
+    });
+    let transformStyle = {transform: [{scale: cardScale}]};
     return (
       <View style={styles.genresBlock.mainBlock}>
         <View style={styles.genresBlock.genresBlock}>
@@ -466,6 +479,8 @@ class HomePage extends React.Component {
         <View style={styles.genresBlock.showsBlock}>
           {showsToDisplay.map((show, showIndex) => {
             const showName = show.title_name;
+            const showSlug = show.slug;
+            const showBanner = show.images.image;
             const indexForNextFocusLeft = !(showIndex % 3);
             const showsLength = showsToDisplay.length;
             const indexForNextFocusRight =
@@ -499,21 +514,26 @@ class HomePage extends React.Component {
                 nextFocusUp={
                   needForNextFocusUp && findNodeHandle(this[CATEGORY])
                 }
+                onBlur={this.handleBlur}
                 onFocus={this.handleShowFocusInGenres.bind(
                   this,
                   showName,
                   this[`ShowInGenres${showIndex}`],
                 )}
+                onPress={this.handleShowPress.bind(this, showSlug, showBanner)}
                 style={[
                   styles.genresBlock.showBlock,
                   showIndex % 3 === 2 && styles.itemBlockWithoutMargin,
                 ]}>
-                <Image
+                <Animated.Image
                   resizeMode="contain"
                   source={{
                     uri: show.images.thumb,
                   }}
-                  style={styles.genresBlock.showImage}
+                  style={[
+                    styles.genresBlock.showImage,
+                    focusedShowInGenres === showName && transformStyle,
+                  ]}
                 />
                 {focusedShowInGenres === showName && !isFocusedHeaderItem && (
                   <Text style={styles.genresBlock.showName} accessible={false}>
