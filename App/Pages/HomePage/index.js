@@ -313,7 +313,7 @@ class HomePage extends React.Component {
         <Image
           resizeMode="contain"
           source={{
-            uri: item.images.thumb,
+            uri: `${item.images.thumb}${styles.allContent.itemBlock.width}`,
           }}
           style={[styles.allContent.itemImage]}
         />
