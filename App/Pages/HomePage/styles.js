@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 import {Colors} from '../../Shared';
+import {WIDTH} from '../../Shared/Constants';
 
 export const styles = StyleSheet.create({
   root: {
@@ -46,6 +47,10 @@ export const styles = StyleSheet.create({
   },
   itemBlockWithoutMargin: {
     marginRight: 0,
+  },
+  banner: {
+    width: WIDTH,
+    height: 180,
   },
   allContent: {
     headerText: {

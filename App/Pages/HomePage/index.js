@@ -31,6 +31,7 @@ import {
   POWERED_BY,
   FAQ_FYC,
   FAQ_PRESS,
+  ANIMATION_DURATION,
 } from '../../Shared/Constants';
 import {styles} from './styles';
 
@@ -283,7 +284,7 @@ class HomePage extends React.Component {
     const {scaleValue} = this.state;
     Animated.timing(scaleValue, {
       toValue: 0,
-      duration: 200,
+      duration: ANIMATION_DURATION,
       easing: Easing.linear,
       useNativeDriver: true,
     }).start();
@@ -298,7 +299,7 @@ class HomePage extends React.Component {
     });
     Animated.timing(scaleValue, {
       toValue: 1,
-      duration: 200,
+      duration: ANIMATION_DURATION,
       easing: Easing.linear,
       useNativeDriver: true,
     }).start();
@@ -362,7 +363,12 @@ class HomePage extends React.Component {
   renderAllContent = content => {
     return (
       <View>
-        <Image accessible={false} source={bannerURL} resizeMode="center" />
+        <Image
+          accessible={false}
+          source={bannerURL}
+          style={styles.banner}
+          resizeMode="center"
+        />
         {content.map((category, categoryIndex) => (
           <View key={category.name}>
             <Text accessible={false} style={styles.allContent.headerText}>
