@@ -1,4 +1,9 @@
-import {FETCH_SHOW_DATA_SUCCESS, FETCH_SHOW_DATA_FAILED} from './Actions';
+import {
+  FETCH_SHOW_DATA_SUCCESS,
+  FETCH_SHOW_DATA_FAILED,
+  FETCH_SHOW_EPISODES_DATA_FAILED,
+  FETCH_SHOW_EPISODES_DATA_SUCCESS,
+} from './Actions';
 import {initialState} from './InitialState';
 
 const reducer = (state = initialState, action) => {
@@ -8,12 +13,27 @@ const reducer = (state = initialState, action) => {
         ...state,
         showData: action.payload,
         fetchShowError: null,
+        fetchShowEpisodesError: null,
       };
     case FETCH_SHOW_DATA_FAILED:
       return {
         ...state,
         showData: null,
         fetchShowError: action.payload,
+        fetchShowEpisodesError: null,
+        showEpisodes: null,
+      };
+    case FETCH_SHOW_EPISODES_DATA_FAILED:
+      return {
+        ...state,
+        fetchShowEpisodesError: action.payload,
+        showEpisodes: null,
+      };
+    case FETCH_SHOW_EPISODES_DATA_SUCCESS:
+      return {
+        ...state,
+        fetchShowEpisodesError: null,
+        showEpisodes: action.payload,
       };
     default:
       return state;
