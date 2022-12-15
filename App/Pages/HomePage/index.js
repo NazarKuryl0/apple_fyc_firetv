@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 
 import FYCLogo from '../../Assets/Images/FYCLogo';
 import {FETCH_HOME_PAGE_DATA} from '../../Core/Store/HomePage/Actions';
+import {FETCH_SHOW_DATA} from '../../Core/Store/ShowPage/Actions';
 import {
   PRESS,
   ALL,
@@ -275,6 +276,11 @@ class HomePage extends React.Component {
     });
   };
 
+  handleShowPress = slug => {
+    const {fetchShowData} = this.props;
+    fetchShowData(slug);
+  };
+
   renderItem = ({item, index}, categoryIndex) => {
     const {focusedShow, isFocusedHeaderItem} = this.state;
     return (
@@ -286,6 +292,7 @@ class HomePage extends React.Component {
           item.title_name,
           this[`Show${categoryIndex}${index}`],
         )}
+        onPress={this.handleShowPress.bind(this, item.slug)}
         style={[
           styles.allContent.itemBlock,
           index % 4 === 3 && styles.itemBlockWithoutMargin,
@@ -528,6 +535,12 @@ const mapDispatchToProps = dispatch => ({
   fetchHomePageData: () => {
     dispatch({
       type: FETCH_HOME_PAGE_DATA,
+    });
+  },
+  fetchShowData: value => {
+    dispatch({
+      type: FETCH_SHOW_DATA,
+      payload: value,
     });
   },
 });

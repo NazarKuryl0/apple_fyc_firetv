@@ -12,6 +12,7 @@ import {
   CLEAR_CLIENT_DATA,
 } from '../Store/Client/Actions';
 import {FETCH_HOME_PAGE_DATA} from '../Store/HomePage/Actions';
+import {FETCH_SHOW_DATA} from '../Store/ShowPage/Actions';
 
 import {fetchFYCUser, fetchPRESSUser, validateUser} from './UserSaga';
 import {
@@ -21,6 +22,7 @@ import {
   clearClientData,
 } from './ClientSaga';
 import {fetchHomePageData} from './HomePageSaga';
+import {fetchShowData} from './ShowSaga';
 
 export default function* root() {
   yield all([takeLatest(VALIDATE_USER, validateUser)]);
@@ -35,4 +37,6 @@ export default function* root() {
   ]);
 
   yield all([takeLatest(FETCH_HOME_PAGE_DATA, fetchHomePageData)]);
+
+  yield all([takeLatest(FETCH_SHOW_DATA, fetchShowData)]);
 }

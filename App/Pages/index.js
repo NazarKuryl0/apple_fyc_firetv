@@ -4,6 +4,7 @@ import SwitchENVPage from './WelcomePage/SwitchENVPage';
 import PRESSSignInEmailPage from './WelcomePage/PRESSSignInEmailPage';
 import PRESSSignInPasswordPage from './WelcomePage/PRESSSignInPasswordPage';
 import HomePage from './HomePage';
+import ShowPage from './ShowPage';
 
 export {
   WelcomePage,
@@ -12,4 +13,5 @@ export {
   PRESSSignInEmailPage,
   PRESSSignInPasswordPage,
   HomePage,
+  ShowPage,
 };

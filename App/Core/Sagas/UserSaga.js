@@ -1,4 +1,4 @@
-import {put, call, select} from 'redux-saga/effects';
+import {put, call} from 'redux-saga/effects';
 
 import {
   FETCH_USER_FAILED,
@@ -6,15 +6,12 @@ import {
   CLEAR_USER_DATA,
 } from '../Store/User/Actions';
 import {
-  CHANGE_CLIENT_REFERER,
   SET_CLIENT_AUTHORIZATION_HEADER,
   CLEAR_CLIENT_DATA,
 } from '../Store/Client/Actions';
 import {SHOW_LOADER, HIDE_LOADER} from '../Store/Common/Actions';
 import Navigator from '../Services/NavigationService';
 import {userService} from '../Services/UserService';
-import {FYC, PRESS} from '../../Shared/Constants';
-import Client from '../Services/client';
 
 export function* validateUser() {
   yield put({
