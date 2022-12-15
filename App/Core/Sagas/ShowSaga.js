@@ -9,11 +9,11 @@ import {showsService} from '../Services/ShowsService';
 import Navigator from '../Services/NavigationService';
 
 export function* fetchShowData({payload}) {
+  const {showSlug, showBackground} = payload;
   yield put({
     type: SHOW_LOADER,
   });
   Navigator.navigate('ShowPage');
-  const showSlug = payload;
   const {data} = yield call(() => showsService.fetchShowDetails(showSlug));
   if (!data.success) {
     yield put({
@@ -27,6 +27,7 @@ export function* fetchShowData({payload}) {
       payload: {
         showSlug,
         summary,
+        showBackground,
         genres,
         release_year,
         runtime,

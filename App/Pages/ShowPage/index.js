@@ -12,12 +12,16 @@ class ShowPage extends React.Component {
     focusedItem: 'button',
   };
   render() {
+    const {
+      showData: {showBackground},
+    } = this.props;
     return (
       <ScrollView
         style={styles.root}
         showsVerticalScrollIndicator={false}
         bounces={false}
         scrollEnabled={false}>
+        <Image source={{uri: showBackground}} style={styles.background} />
         <View style={styles.logoBlock}>
           <Image source={logo} resizeMode="center" style={styles.logo} />
         </View>

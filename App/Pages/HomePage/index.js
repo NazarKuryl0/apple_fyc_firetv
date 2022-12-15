@@ -281,16 +281,15 @@ class HomePage extends React.Component {
     });
   };
 
-  handleShowPress = slug => {
+  handleShowPress = (slug, showBackground) => {
     const {fetchShowData, setNeedUpdateHomePageData} = this.props;
     setNeedUpdateHomePageData();
-    fetchShowData(slug);
+    fetchShowData(slug, showBackground);
   };
 
   renderItem = ({item, index}, categoryIndex) => {
     const {focusedShow, isFocusedHeaderItem} = this.state;
     const {needUpdateHomePageData, showSlug} = this.props;
-    console.log(item.slug === showSlug);
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -301,7 +300,7 @@ class HomePage extends React.Component {
           item.title_name,
           this[`Show${categoryIndex}${index}`],
         )}
-        onPress={this.handleShowPress.bind(this, item.slug)}
+        onPress={this.handleShowPress.bind(this, item.slug, item.images.image)}
         style={[
           styles.allContent.itemBlock,
           index % 4 === 3 && styles.itemBlockWithoutMargin,
@@ -548,10 +547,13 @@ const mapDispatchToProps = dispatch => ({
       type: FETCH_HOME_PAGE_DATA,
     });
   },
-  fetchShowData: value => {
+  fetchShowData: (showSlug, showBackground) => {
     dispatch({
       type: FETCH_SHOW_DATA,
-      payload: value,
+      payload: {
+        showSlug,
+        showBackground,
+      },
     });
   },
   setNeedUpdateHomePageData: () => {

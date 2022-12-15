@@ -1,10 +1,18 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 import {Colors} from '../../Shared';
 
 export const styles = StyleSheet.create({
   root: {
     backgroundColor: Colors.black,
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: -1,
+    width: Dimensions.get('screen').width,
+    height: Dimensions.get('screen').height,
   },
   logoBlock: {
     width: '100%',
@@ -41,7 +49,8 @@ export const styles = StyleSheet.create({
     width: '75%',
   },
   descriptionTextBlock: {
-    height:70,
+    height: 70,
+    textAlign: 'justify',
   },
   genresBlock: {
     flexDirection: 'row',
