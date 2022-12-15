@@ -3,6 +3,8 @@ import {
   FETCH_SHOW_DATA_FAILED,
   FETCH_SHOW_EPISODES_DATA_FAILED,
   FETCH_SHOW_EPISODES_DATA_SUCCESS,
+  SET_SHOW_BANNER,
+  RESET_SHOW_BANNER,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -21,6 +23,7 @@ const reducer = (state = initialState, action) => {
         showData: null,
         fetchShowError: action.payload,
         fetchShowEpisodesError: null,
+        showBanner: null,
         showEpisodes: null,
       };
     case FETCH_SHOW_EPISODES_DATA_FAILED:
@@ -34,6 +37,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         fetchShowEpisodesError: null,
         showEpisodes: action.payload,
+      };
+    case SET_SHOW_BANNER:
+      return {
+        ...state,
+        showBanner: action.payload,
+      };
+    case RESET_SHOW_BANNER:
+      return {
+        ...state,
+        showBanner: null,
       };
     default:
       return state;

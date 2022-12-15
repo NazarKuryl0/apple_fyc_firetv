@@ -12,10 +12,12 @@ import {
 } from './Core/Store/Client/Actions';
 import NavigationService from './Core/Services/NavigationService';
 import AppNavigator from './AppNavigator';
+import {RESET_SHOW_BANNER} from './Core/Store/ShowPage/Actions';
 
 class RootScreen extends Component {
   componentDidMount() {
-    const {token, resetLoader} = this.props;
+    const {token, resetLoader, resetShowBanner} = this.props;
+    resetShowBanner();
     resetLoader();
     if (token) {
       const {
@@ -37,7 +39,7 @@ class RootScreen extends Component {
   };
 
   render() {
-    const {loader} = this.props;
+    const {loader, showBanner} = this.props;
     return (
       <View style={{flex: 1}}>
         <AppNavigator
@@ -45,16 +47,17 @@ class RootScreen extends Component {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }}
         />
-        {!!(loader > 0) && <Loader />}
+        {!!(loader > 0) && <Loader showBanner={showBanner} />}
       </View>
     );
   }
 }
 
-const mapStateToProps = ({common, user, client}) => ({
+const mapStateToProps = ({common, user, client, show}) => ({
   loader: common.loader,
   token: user.token,
   isFYCContent: client.isFYCContent,
+  showBanner: show.showBanner,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -78,6 +81,11 @@ const mapDispatchToProps = dispatch => ({
   resetLoader: () => {
     dispatch({
       type: RESET_LOADER,
+    });
+  },
+  resetShowBanner: () => {
+    dispatch({
+      type: RESET_SHOW_BANNER,
     });
   },
 });

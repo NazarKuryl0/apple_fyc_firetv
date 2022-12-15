@@ -3,4 +3,5 @@ export const initialState = {
   showData: null,
   fetchShowEpisodesError: null,
   showEpisodes: null,
+  showBanner: null,
 };

@@ -15,7 +15,10 @@ import {
   FETCH_HOME_PAGE_DATA,
   SET_NEED_UPDATE_HOME_PAGE_DATA_TO_FALSE,
 } from '../../Core/Store/HomePage/Actions';
-import {FETCH_SHOW_DATA} from '../../Core/Store/ShowPage/Actions';
+import {
+  FETCH_SHOW_DATA,
+  SET_SHOW_BANNER,
+} from '../../Core/Store/ShowPage/Actions';
 import {
   PRESS,
   ALL,
@@ -282,7 +285,9 @@ class HomePage extends React.Component {
   };
 
   handleShowPress = (slug, showBackground) => {
-    const {fetchShowData, setNeedUpdateHomePageDataToFalse} = this.props;
+    const {fetchShowData, setNeedUpdateHomePageDataToFalse, setShowBanner} =
+      this.props;
+    setShowBanner(showBackground);
     setNeedUpdateHomePageDataToFalse();
     fetchShowData(slug, showBackground);
   };
@@ -559,6 +564,12 @@ const mapDispatchToProps = dispatch => ({
   setNeedUpdateHomePageDataToFalse: () => {
     dispatch({
       type: SET_NEED_UPDATE_HOME_PAGE_DATA_TO_FALSE,
+    });
+  },
+  setShowBanner: value => {
+    dispatch({
+      type: SET_SHOW_BANNER,
+      payload: value,
     });
   },
 });
