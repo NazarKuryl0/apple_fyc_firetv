@@ -10,6 +10,7 @@ import {
 import {connect} from 'react-redux';
 
 import {BUTTON} from '../../Shared/Constants';
+import {Blur, Shadow} from '../../Shared';
 import Play from '../../Assets/Icons/play.svg';
 import {styles} from './styles';
 
@@ -33,8 +34,11 @@ class ShowPage extends React.Component {
         <Image source={{uri: showBackground}} style={styles.background} />
         <Image
           source={{uri: showBackground}}
-          style={[styles.background, {top: 540}]}
+          blurRadius={50}
+          style={[styles.background, styles.backgroundSecond]}
         />
+        <Blur />
+        <Shadow />
         <View style={styles.logoBlock}>
           <Image source={logo} resizeMode="center" style={styles.logo} />
         </View>

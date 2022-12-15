@@ -16,6 +16,9 @@ export const styles = StyleSheet.create({
     width: WIDTH,
     height: HEIGHT,
   },
+  backgroundSecond: {
+    top: HEIGHT,
+  },
   logoBlock: {
     width: '100%',
     paddingTop: 30,

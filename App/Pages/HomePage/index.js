@@ -13,7 +13,7 @@ import {connect} from 'react-redux';
 import FYCLogo from '../../Assets/Images/FYCLogo';
 import {
   FETCH_HOME_PAGE_DATA,
-  SET_NEED_UPDATE_HOME_PAGE_DATA,
+  SET_NEED_UPDATE_HOME_PAGE_DATA_TO_FALSE,
 } from '../../Core/Store/HomePage/Actions';
 import {FETCH_SHOW_DATA} from '../../Core/Store/ShowPage/Actions';
 import {
@@ -282,8 +282,8 @@ class HomePage extends React.Component {
   };
 
   handleShowPress = (slug, showBackground) => {
-    const {fetchShowData, setNeedUpdateHomePageData} = this.props;
-    setNeedUpdateHomePageData();
+    const {fetchShowData, setNeedUpdateHomePageDataToFalse} = this.props;
+    setNeedUpdateHomePageDataToFalse();
     fetchShowData(slug, showBackground);
   };
 
@@ -556,9 +556,9 @@ const mapDispatchToProps = dispatch => ({
       },
     });
   },
-  setNeedUpdateHomePageData: () => {
+  setNeedUpdateHomePageDataToFalse: () => {
     dispatch({
-      type: SET_NEED_UPDATE_HOME_PAGE_DATA,
+      type: SET_NEED_UPDATE_HOME_PAGE_DATA_TO_FALSE,
     });
   },
 });
