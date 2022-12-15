@@ -13,7 +13,7 @@ import Navigator from '../Services/NavigationService';
 import {WATCH_NOW} from '../../Shared/Constants';
 
 export function* fetchShowData({payload}) {
-  const {showSlug, showBackground} = payload;
+  const {showSlug} = payload;
   yield put({
     type: SHOW_LOADER,
   });
@@ -86,7 +86,6 @@ export function* fetchShowData({payload}) {
       payload: {
         showSlug,
         summary,
-        showBackground,
         genres,
         release_year,
         runtime,

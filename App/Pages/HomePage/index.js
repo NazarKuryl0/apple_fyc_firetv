@@ -289,7 +289,7 @@ class HomePage extends React.Component {
       this.props;
     setShowBanner(showBackground);
     setNeedUpdateHomePageDataToFalse();
-    fetchShowData(slug, showBackground);
+    fetchShowData(slug);
   };
 
   renderItem = ({item, index}, categoryIndex) => {
@@ -552,12 +552,11 @@ const mapDispatchToProps = dispatch => ({
       type: FETCH_HOME_PAGE_DATA,
     });
   },
-  fetchShowData: (showSlug, showBackground) => {
+  fetchShowData: showSlug => {
     dispatch({
       type: FETCH_SHOW_DATA,
       payload: {
         showSlug,
-        showBackground,
       },
     });
   },

@@ -14,6 +14,7 @@ import {convertShowRuntime} from '../../Shared/Helpers';
 import {Blur, Shadow} from '../../Shared';
 import Play from '../../Assets/Icons/play.svg';
 import {styles} from './styles';
+import FastImage from 'react-native-fast-image';
 
 const logo = require('../../Assets/Images/Logo.jpg');
 
@@ -24,7 +25,8 @@ class ShowPage extends React.Component {
     focusedSeasonRef: null,
     isSetUpFirstTimeSeasonRef: false,
   };
-  componentDidUpdate(prevProps) {
+
+  componentDidUpdate() {
     const {isSetUpFirstTimeSeasonRef} = this.state;
     const {showEpisodes} = this.props;
     if (!isSetUpFirstTimeSeasonRef && showEpisodes.length && this['Season0']) {
@@ -34,9 +36,9 @@ class ShowPage extends React.Component {
       }
     }
   }
+
   render() {
-    const {showData, showEpisodes} = this.props;
-    const showBackground = showData && showData.showBackground;
+    const {showData, showEpisodes, showBanner} = this.props;
     return (
       <ScrollView
         contentContainerStyle={styles.root}
@@ -44,11 +46,14 @@ class ShowPage extends React.Component {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         bounces={false}>
-        {!!showBackground && (
+        {!!showBanner && (
           <View>
-            <Image source={{uri: showBackground}} style={styles.background} />
+            <FastImage
+              source={{uri: showBanner, priority: FastImage.priority.high}}
+              style={styles.background}
+            />
             <Image
-              source={{uri: showBackground}}
+              source={{uri: showBanner}}
               blurRadius={50}
               style={[styles.background, styles.backgroundSecond]}
             />
@@ -239,6 +244,7 @@ class ShowPage extends React.Component {
 const mapStateToProps = ({show}) => ({
   showData: show.showData,
   showEpisodes: show.showEpisodes,
+  showBanner: show.showBanner,
 });
 
 const mapDispatchToProps = dispatch => ({});
