@@ -32,6 +32,8 @@ class FYCSignInPage extends React.Component {
   handleCloseAlert = () => {
     const {clearFetchFYCErrorMessage} = this.props;
     clearFetchFYCErrorMessage();
+    this.setState({code: ''});
+    this.input.focus();
   };
 
   render() {
@@ -41,6 +43,7 @@ class FYCSignInPage extends React.Component {
       <View style={styles.root}>
         {fetchUserErrorMessage && this.renderErrorModal()}
         <TextInput
+          ref={ref => (this.input = ref)}
           autoFocus
           value={code}
           placeholder="Enter Code"

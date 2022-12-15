@@ -1,4 +1,4 @@
-import {put, call} from 'redux-saga/effects';
+import {put, call, all} from 'redux-saga/effects';
 
 import {SHOW_LOADER, HIDE_LOADER} from '../Store/Common/Actions';
 import {
@@ -10,6 +10,7 @@ import {
 import {FEATURE} from '../../Shared/Constants';
 import {showsService} from '../Services/ShowsService';
 import Navigator from '../Services/NavigationService';
+import {WATCH_NOW} from '../../Shared/Constants';
 
 export function* fetchShowData({payload}) {
   const {showSlug, showBackground} = payload;
@@ -26,6 +27,7 @@ export function* fetchShowData({payload}) {
   } else {
     const {summary, genres, release_year, runtime, title_type, id} =
       data.data[0];
+    let episodesDataToDisplay;
     if (title_type === FEATURE) {
       const {data: showEpisodesData} = yield call(() =>
         showsService.fetchSeasonEpisodes(id),
@@ -36,12 +38,48 @@ export function* fetchShowData({payload}) {
           payload: showEpisodesData.message,
         });
       } else {
+        episodesDataToDisplay = [{
+          seasonName: WATCH_NOW,
+          seasonEpisodes: showEpisodesData.data,
+        }];
         yield put({
           type: FETCH_SHOW_EPISODES_DATA_SUCCESS,
-          payload: showEpisodesData.data,
+          payload: episodesDataToDisplay,
         });
       }
     } else {
+      const {data: seasonsData} = yield call(() =>
+        showsService.fetchShowSeasons(showSlug),
+      );
+      if (!seasonsData.success) {
+        yield put({
+          type: FETCH_SHOW_EPISODES_DATA_FAILED,
+          payload: seasonsData.message,
+        });
+      } else {
+        const episodesData = yield all(
+          seasonsData.data.map(season => {
+            return call(() => showsService.fetchSeasonEpisodes(season.id));
+          }),
+        );
+        if (!episodesData[0].data.success) {
+          yield put({
+            type: FETCH_SHOW_EPISODES_DATA_FAILED,
+            payload: episodesData[0].data.message,
+          });
+        } else {
+          episodesDataToDisplay = episodesData.map(episodes => {
+            return {
+              seasonName: episodes.data.data[0].season_name,
+              seasonEpisodes: episodes.data.data,
+            };
+          });
+          yield put({
+            type: FETCH_SHOW_EPISODES_DATA_SUCCESS,
+            payload: episodesDataToDisplay,
+          });
+        }
+      }
     }
     yield put({
       type: FETCH_SHOW_DATA_SUCCESS,

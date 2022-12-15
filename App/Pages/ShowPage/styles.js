@@ -67,14 +67,26 @@ export const styles = StyleSheet.create({
   episodesBlock: {
     paddingHorizontal: 20,
   },
-  episodesHeader: {
+  seasonsBlock: {
+    flexDirection: 'row',
+  },
+  episodesHeaderBlock: {
     marginTop: 30,
     marginBottom: 10,
+    marginRight: 20,
+  },
+  episodesHeaderBlockActive: {
+    borderRadius: 10,
+    backgroundColor: Colors.dimGray,
+  },
+  episodesHeader: {
+    padding: 5,
     color: Colors.white,
     fontWeight: 'bold',
   },
   episodeBlock: {
     width: 250,
+    marginRight: 20,
   },
   episodeImage: {
     width: '100%',
@@ -84,7 +96,6 @@ export const styles = StyleSheet.create({
   episodeDescriptionBlock: {
     margin: 5,
     padding: 5,
-    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: 5,
     height: 120,
   },
@@ -98,5 +109,12 @@ export const styles = StyleSheet.create({
   episodeDescription: {
     color: Colors.white,
     fontSize: 12,
+  },
+  lastItem: {
+    marginRight: 0,
+  },
+  activeBlock: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 10,
   },
 });

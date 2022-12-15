@@ -537,7 +537,7 @@ const mapStateToProps = ({home, client, show}) => ({
   content: home.content,
   contentWithGenres: home.contentWithGenres,
   needUpdateHomePageData: home.needUpdateHomePageData,
-  showSlug: show.showData.showSlug,
+  showSlug: show.showData?.showSlug,
   isFYCContent: client.isFYCContent,
 });
 

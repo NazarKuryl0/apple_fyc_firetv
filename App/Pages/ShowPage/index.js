@@ -10,6 +10,7 @@ import {
 import {connect} from 'react-redux';
 
 import {BUTTON} from '../../Shared/Constants';
+import {convertShowRuntime} from '../../Shared/Helpers';
 import {Blur, Shadow} from '../../Shared';
 import Play from '../../Assets/Icons/play.svg';
 import {styles} from './styles';
@@ -19,32 +20,48 @@ const logo = require('../../Assets/Images/Logo.jpg');
 class ShowPage extends React.Component {
   state = {
     focusedItem: BUTTON,
+    focusedSeason: null,
+    focusedSeasonRef: null,
+    isSetUpFirstTimeSeasonRef: false,
   };
+  componentDidUpdate(prevProps) {
+    const {isSetUpFirstTimeSeasonRef} = this.state;
+    const {showEpisodes} = this.props;
+    if (!isSetUpFirstTimeSeasonRef && showEpisodes.length && this['Season0']) {
+      this.setState({isSetUpFirstTimeSeasonRef: true});
+      if (showEpisodes.length > 1) {
+        this.setState({focusedSeasonRef: this['Season0']});
+      }
+    }
+  }
   render() {
-    const {
-      showData: {showBackground},
-      showEpisodes,
-    } = this.props;
+    const {showData, showEpisodes} = this.props;
+    const showBackground = showData && showData.showBackground;
     return (
       <ScrollView
         contentContainerStyle={styles.root}
         ref={ref => (this.main = ref)}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
         bounces={false}>
-        <Image source={{uri: showBackground}} style={styles.background} />
-        <Image
-          source={{uri: showBackground}}
-          blurRadius={50}
-          style={[styles.background, styles.backgroundSecond]}
-        />
+        {!!showBackground && (
+          <View>
+            <Image source={{uri: showBackground}} style={styles.background} />
+            <Image
+              source={{uri: showBackground}}
+              blurRadius={50}
+              style={[styles.background, styles.backgroundSecond]}
+            />
+          </View>
+        )}
         <Blur />
         <Shadow />
         <View style={styles.logoBlock}>
           <Image source={logo} resizeMode="center" style={styles.logo} />
         </View>
         <View style={styles.showDescriptionBlock}>
-          {this.renderButton()}
-          {this.renderShowDescription()}
+          {!!showEpisodes && this.renderButton(showEpisodes)}
+          {!!showData && this.renderShowDescription(showData)}
         </View>
         {!!showEpisodes && this.renderEpisodes(showEpisodes)}
       </ScrollView>
@@ -56,13 +73,21 @@ class ShowPage extends React.Component {
     this.setState({focusedItem: BUTTON});
   };
 
-  renderButton = () => {
+  renderButton = showEpisodes => {
+    const {focusedSeasonRef} = this.state;
     return (
       <TouchableOpacity
         hasTVPreferredFocus
         activeOpacity={1}
         ref={ref => (this[BUTTON] = ref)}
         onFocus={this.handleButtonFocus}
+        nextFocusDown={
+          focusedSeasonRef
+            ? findNodeHandle(focusedSeasonRef)
+            : showEpisodes.length > 1
+            ? findNodeHandle(this['Season0'])
+            : null
+        }
         style={styles.buttonBlock}>
         <Play />
         <Text accessible={false} style={styles.buttonText}>
@@ -72,8 +97,7 @@ class ShowPage extends React.Component {
     );
   };
 
-  renderShowDescription = () => {
-    const {showData} = this.props;
+  renderShowDescription = showData => {
     return (
       <View style={styles.descriptionBlock}>
         <Text
@@ -96,38 +120,91 @@ class ShowPage extends React.Component {
     );
   };
 
+  handleSeasonFocus = value => {
+    this.main.scrollToEnd({animated: true});
+    this.setState({focusedItem: value});
+  };
+
+  handleSeasonPress = (value, ref) => {
+    this.episodeScrollBlock.scrollTo({x: 0, animated: true});
+    this.setState({focusedSeason: value, focusedSeasonRef: ref});
+  };
+
   handleEpisodeFocus = value => {
     this.main.scrollToEnd({animated: true});
     this.setState({focusedItem: value});
   };
 
-  renderEpisodes = episodes => {
-    const {focusedItem} = this.state;
+  renderEpisodes = showEpisodes => {
+    const {focusedItem, focusedSeason, focusedSeasonRef} = this.state;
+    const Block = showEpisodes.length > 1 ? TouchableOpacity : View;
+    const esisodesToDisplay =
+      showEpisodes.length === 1
+        ? showEpisodes[0].seasonEpisodes
+        : focusedSeason
+        ? showEpisodes.filter(season => season.seasonName === focusedSeason)[0]
+            .seasonEpisodes
+        : showEpisodes[0].seasonEpisodes;
     return (
       <View style={styles.episodesBlock}>
-        {focusedItem !== BUTTON && (
-          <Text accessible={false} style={styles.episodesHeader}>
-            Watch Now
-          </Text>
-        )}
+        <View style={styles.seasonsBlock}>
+          {showEpisodes.map((season, seasonIndex) => (
+            <Block
+              key={season.seasonName}
+              ref={ref => (this[`Season${seasonIndex}`] = ref)}
+              nextFocusRight={
+                seasonIndex === showEpisodes.length - 1 &&
+                findNodeHandle(this[`Season${seasonIndex}`])
+              }
+              style={[
+                styles.episodesHeaderBlock,
+                focusedSeasonRef === this[`Season${seasonIndex}`] &&
+                  styles.episodesHeaderBlockActive,
+              ]}
+              onPress={this.handleSeasonPress.bind(
+                this,
+                season.seasonName,
+                this[`Season${seasonIndex}`],
+              )}
+              onFocus={this.handleSeasonFocus.bind(this, season.seasonName)}>
+              <Text
+                accessible={false}
+                style={[
+                  styles.episodesHeader,
+                  focusedItem === season.seasonName && styles.activeBlock,
+                ]}>
+                {season.seasonName}
+              </Text>
+            </Block>
+          ))}
+        </View>
         <ScrollView
+          ref={ref => (this.episodeScrollBlock = ref)}
           horizontal
           bounces={false}
           showsHorizontalScrollIndicator={false}>
-          {episodes.map(episode => {
+          {esisodesToDisplay.map((episode, episodeIndex) => {
             const {poster, runtime, asset_id, name, summary} = episode;
             return (
               <TouchableOpacity
                 key={asset_id}
-                nextFocusUp={findNodeHandle(this[BUTTON])}
-                style={styles.episodeBlock}
+                style={[
+                  styles.episodeBlock,
+                  episodeIndex === esisodesToDisplay.length - 1 &&
+                    styles.lastItem,
+                ]}
+                nextFocusUp={findNodeHandle(focusedSeasonRef)}
                 onFocus={this.handleEpisodeFocus.bind(this, name)}>
                 <Image
                   resizeMode="contain"
                   source={{uri: poster}}
                   style={styles.episodeImage}
                 />
-                <View style={styles.episodeDescriptionBlock}>
+                <View
+                  style={[
+                    styles.episodeDescriptionBlock,
+                    focusedItem === name && styles.activeBlock,
+                  ]}>
                   <Text
                     accessible={false}
                     numberOfLines={1}
@@ -147,7 +224,7 @@ class ShowPage extends React.Component {
                     accessible={false}
                     numberOfLines={1}
                     style={styles.episodeDescription}>
-                    {runtime}
+                    {convertShowRuntime(runtime)}
                   </Text>
                 </View>
               </TouchableOpacity>

@@ -10,6 +10,7 @@ export const SIGN_OUT = 'Sign Out';
 export const FEATURE = 'feature';
 export const POWERED_BY = `Powered by Deluxe One.`;
 export const BUTTON = 'button';
+export const WATCH_NOW = 'Watch Now';
 export const ALL_RIGHTS_RESERVER = `Copyright ${'\u00A9'} ${new Date().getFullYear()} Apple Inc. All rights reserved.`;
 
 export const SWITCH_ENV_CODE = 'switchENV';
