@@ -9,10 +9,11 @@ import {showsService} from '../Services/ShowsService';
 import Navigator from '../Services/NavigationService';
 
 export function* fetchShowData({payload}) {
+  const showSlug = payload;
   yield put({
     type: SHOW_LOADER,
   });
-  const {data} = yield call(() => showsService.fetchShowDetails(payload));
+  const {data} = yield call(() => showsService.fetchShowDetails(showSlug));
   if (!data.success) {
     yield put({
       type: FETCH_SHOW_DATA_FAILED,
@@ -23,6 +24,7 @@ export function* fetchShowData({payload}) {
     yield put({
       type: FETCH_SHOW_DATA_SUCCESS,
       payload: {
+        showSlug,
         summary,
         genres,
         release_year,

@@ -7,13 +7,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         showData: action.payload,
-        fetchHomePageDataError: null,
+        fetchShowError: null,
       };
     case FETCH_SHOW_DATA_FAILED:
       return {
         ...state,
         showData: null,
-        fetchHomePageDataError: action.payload,
+        fetchShowError: action.payload,
       };
     default:
       return state;

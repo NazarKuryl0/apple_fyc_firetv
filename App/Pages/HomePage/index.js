@@ -11,7 +11,10 @@ import {
 import {connect} from 'react-redux';
 
 import FYCLogo from '../../Assets/Images/FYCLogo';
-import {FETCH_HOME_PAGE_DATA} from '../../Core/Store/HomePage/Actions';
+import {
+  FETCH_HOME_PAGE_DATA,
+  SET_NEED_UPDATE_HOME_PAGE_DATA,
+} from '../../Core/Store/HomePage/Actions';
 import {FETCH_SHOW_DATA} from '../../Core/Store/ShowPage/Actions';
 import {
   PRESS,
@@ -49,8 +52,10 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    const {fetchHomePageData} = this.props;
-    fetchHomePageData();
+    const {fetchHomePageData, needUpdateHomePageData} = this.props;
+    if (needUpdateHomePageData) {
+      fetchHomePageData();
+    }
     this[ALL].setNativeProps({
       nextFocusLeft: findNodeHandle(this[ALL]),
     });
@@ -189,7 +194,7 @@ class HomePage extends React.Component {
 
   renderHeader = () => {
     const {focusedHeaderItem, isFocusedHeaderItem} = this.state;
-    const {isFYCContent} = this.props;
+    const {isFYCContent, needUpdateHomePageData} = this.props;
     return (
       <View style={styles.headerBlock}>
         {isFYCContent ? <FYCLogo /> : <Text accessible={false}>{PRESS}</Text>}
@@ -201,7 +206,7 @@ class HomePage extends React.Component {
                 activeOpacity={1}
                 key={item}
                 ref={ref => (this[item] = ref)}
-                hasTVPreferredFocus={item === ALL}
+                hasTVPreferredFocus={item === ALL && needUpdateHomePageData}
                 style={[
                   styles.headerBlockItem,
                   focusedHeaderItem === item &&
@@ -277,16 +282,20 @@ class HomePage extends React.Component {
   };
 
   handleShowPress = slug => {
-    const {fetchShowData} = this.props;
+    const {fetchShowData, setNeedUpdateHomePageData} = this.props;
+    setNeedUpdateHomePageData();
     fetchShowData(slug);
   };
 
   renderItem = ({item, index}, categoryIndex) => {
     const {focusedShow, isFocusedHeaderItem} = this.state;
+    const {needUpdateHomePageData, showSlug} = this.props;
+    console.log(item.slug === showSlug);
     return (
       <TouchableOpacity
         activeOpacity={1}
         ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
+        hasTVPreferredFocus={!needUpdateHomePageData && item.slug === showSlug}
         onFocus={this.handleShowFocus.bind(
           this,
           item.title_name,
@@ -525,9 +534,11 @@ class HomePage extends React.Component {
   };
 }
 
-const mapStateToProps = ({home, client}) => ({
+const mapStateToProps = ({home, client, show}) => ({
   content: home.content,
   contentWithGenres: home.contentWithGenres,
+  needUpdateHomePageData: home.needUpdateHomePageData,
+  showSlug: show.showData.showSlug,
   isFYCContent: client.isFYCContent,
 });
 
@@ -541,6 +552,11 @@ const mapDispatchToProps = dispatch => ({
     dispatch({
       type: FETCH_SHOW_DATA,
       payload: value,
+    });
+  },
+  setNeedUpdateHomePageData: () => {
+    dispatch({
+      type: SET_NEED_UPDATE_HOME_PAGE_DATA,
     });
   },
 });

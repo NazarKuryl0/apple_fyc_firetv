@@ -1,6 +1,7 @@
 import {
   FETCH_HOME_PAGE_DATA_SUCCESS,
   FETCH_HOME_PAGE_DATA_FAILED,
+  SET_NEED_UPDATE_HOME_PAGE_DATA,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -20,6 +21,12 @@ const reducer = (state = initialState, action) => {
         contentWithGenres: null,
         fetchHomePageDataError: action.payload,
       };
+    case SET_NEED_UPDATE_HOME_PAGE_DATA:
+      return {
+        ...state,
+        needUpdateHomePageData: false,
+      };
+
     default:
       return state;
   }
