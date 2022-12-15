@@ -1,3 +1,5 @@
+import {Dimensions} from 'react-native';
+
 export const FYC = 'FYC';
 export const PRESS = 'PRESS';
 export const LINK = 'LINK';
@@ -7,6 +9,7 @@ export const FAQ = 'FAQ';
 export const SIGN_OUT = 'Sign Out';
 export const FEATURE = 'feature';
 export const POWERED_BY = `Powered by Deluxe One.`;
+export const BUTTON = 'button';
 export const ALL_RIGHTS_RESERVER = `Copyright ${'\u00A9'} ${new Date().getFullYear()} Apple Inc. All rights reserved.`;
 
 export const SWITCH_ENV_CODE = 'switchENV';
@@ -23,6 +26,9 @@ export const PressRefererUAT = 'https://press-apple.dmlib.pro/';
 export const ConfigRefererINT = 'https://one-service.dmlib.in/api/v1';
 export const ConfigRefererPROD = 'https://one-service.dmlib.io/api/v1';
 export const ConfigRefererUAT = 'https://one-service.dmlib.pro/api/v1';
+
+export const WIDTH = Dimensions.get('screen').width;
+export const HEIGHT = Dimensions.get('screen').height;
 
 export const FAQ_FYC = [
   {
