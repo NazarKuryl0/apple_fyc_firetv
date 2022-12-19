@@ -85,6 +85,7 @@ export const styles = StyleSheet.create({
       marginTop: 50,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      paddingHorizontal: 40,
     },
     genresBlock: {
       width: '32%',
