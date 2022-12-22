@@ -4,7 +4,7 @@ import {
   FETCH_SHOW_EPISODES_DATA_FAILED,
   FETCH_SHOW_EPISODES_DATA_SUCCESS,
   SET_SHOW_BANNER,
-  RESET_SHOW_BANNER,
+  CLEAR_SHOW_BANNER,
   SET_SELECTED_EPISODE,
   CLEAR_SHOW_EPISODES,
 } from './Actions';
@@ -48,7 +48,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         showBanner: action.payload,
       };
-    case RESET_SHOW_BANNER:
+    case CLEAR_SHOW_BANNER:
       return {
         ...state,
         showBanner: null,

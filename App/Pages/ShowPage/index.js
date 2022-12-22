@@ -15,7 +15,7 @@ import {
   FETCH_VIDEO_DATA,
   CLEAR_FETCH_VIDEO_DATA_ERROR_MESSAGE,
 } from '../../Core/Store/Video/Actions';
-import {RESET_SHOW_BANNER} from '../../Core/Store/ShowPage/Actions';
+import {CLEAR_SHOW_BANNER} from '../../Core/Store/ShowPage/Actions';
 import {BUTTON} from '../../Shared/Constants';
 import {convertShowRuntime} from '../../Shared/Helpers';
 import {Blur, Shadow} from '../../Shared';
@@ -161,8 +161,8 @@ class ShowPage extends React.Component {
   };
 
   handleEpisodePress = value => {
-    const {setSelectedEpsiode, fetchVideoData, resetShowBanner} = this.props;
-    resetShowBanner();
+    const {setSelectedEpsiode, fetchVideoData, clearShowBanner} = this.props;
+    clearShowBanner();
     setSelectedEpsiode(value);
     fetchVideoData(value);
   };
@@ -288,9 +288,9 @@ const mapDispatchToProps = dispatch => ({
       payload: value,
     });
   },
-  resetShowBanner: () => {
+  clearShowBanner: () => {
     dispatch({
-      type: RESET_SHOW_BANNER,
+      type: CLEAR_SHOW_BANNER,
     });
   },
   fetchVideoData: value => {

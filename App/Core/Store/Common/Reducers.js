@@ -1,4 +1,4 @@
-import {SHOW_LOADER, HIDE_LOADER, RESET_LOADER} from './Actions';
+import {SHOW_LOADER, HIDE_LOADER, CLEAR_LOADER} from './Actions';
 import {initialState} from './InitialState';
 
 const reducer = (state = initialState, action) => {
@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         loader: state.loader - 1,
       };
-    case RESET_LOADER: {
+    case CLEAR_LOADER: {
       return {
         ...state,
         loader: 0,
