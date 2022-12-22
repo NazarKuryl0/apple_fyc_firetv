@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 
 import FYCLogo from '../../Assets/Images/FYCLogo';
 import {
+  CLEAR_SELECTED_SHOW,
   FETCH_HOME_PAGE_DATA,
   SET_OFFSET,
   SET_SELECTED_SHOW,
@@ -165,6 +166,9 @@ class HomePage extends React.Component {
   };
 
   handleHeaderItemFocus = item => {
+    const {clearSelectedShow} = this.props;
+    clearSelectedShow();
+
     this.setState({
       focusedHeaderItem: item,
       isFocusedHeaderItem: true,
@@ -644,6 +648,11 @@ const mapDispatchToProps = dispatch => ({
     dispatch({
       type: SET_SELECTED_SHOW,
       payload: value,
+    });
+  },
+  clearSelectedShow: () => {
+    dispatch({
+      type: CLEAR_SELECTED_SHOW,
     });
   },
 });
