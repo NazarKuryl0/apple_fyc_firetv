@@ -27,7 +27,7 @@ export function* fetchHomePageData() {
     });
   } else {
     const filteredData = data.data.filter(
-      item => item.module.type === 'title_grid',
+      item => item.module.type === 'title_grid' && item.module.content.length,
     );
     const dataToDisplay = filteredData.map(item => {
       return {

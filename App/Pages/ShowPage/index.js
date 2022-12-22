@@ -45,9 +45,9 @@ class ShowPage extends React.Component {
   }
 
   render() {
-    const {showData, showEpisodes, showBanner, fetchVideoDataErrorMessage} =
+    const {showData, showEpisodes, fetchVideoDataErrorMessage} =
       this.props;
-    const {showBackground} = showData;
+    const showBackground = showData?.showBackground;
     return (
       <ScrollView
         contentContainerStyle={styles.root}
