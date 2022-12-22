@@ -13,13 +13,15 @@ import {
 import {connect} from 'react-redux';
 
 import FYCLogo from '../../Assets/Images/FYCLogo';
-import {FETCH_HOME_PAGE_DATA} from '../../Core/Store/HomePage/Actions';
+import {
+  FETCH_HOME_PAGE_DATA,
+  SET_SELECTED_SHOW,
+} from '../../Core/Store/HomePage/Actions';
 import {
   FETCH_SHOW_DATA,
   SET_SHOW_BANNER,
   CLEAR_SHOW_EPISODES,
   CLEAR_SELECTED_EPISODE,
-  SET_SELECTED_SHOW,
   CLEAR_SHOW_DATA,
 } from '../../Core/Store/ShowPage/Actions';
 import {
@@ -602,10 +604,10 @@ class HomePage extends React.Component {
   };
 }
 
-const mapStateToProps = ({home, client, show}) => ({
+const mapStateToProps = ({home, client}) => ({
   content: home.content,
   contentWithGenres: home.contentWithGenres,
-  selectedShow: show.selectedShow,
+  selectedShow: home.selectedShow,
   isFYCContent: client.isFYCContent,
 });
 

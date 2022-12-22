@@ -1,6 +1,8 @@
 import {
   FETCH_HOME_PAGE_DATA_SUCCESS,
   FETCH_HOME_PAGE_DATA_FAILED,
+  SET_SELECTED_SHOW,
+  CLEAR_SELECTED_SHOW,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -19,6 +21,17 @@ const reducer = (state = initialState, action) => {
         content: null,
         contentWithGenres: null,
         fetchHomePageDataError: action.payload,
+      };
+
+    case SET_SELECTED_SHOW:
+      return {
+        ...state,
+        selectedShow: action.payload,
+      };
+    case CLEAR_SELECTED_SHOW:
+      return {
+        ...state,
+        selectedShow: action.payload,
       };
 
     default:
