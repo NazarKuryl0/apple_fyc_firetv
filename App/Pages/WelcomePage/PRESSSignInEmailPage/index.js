@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, Alert, View} from 'react-native';
+import {TextInput, Alert, View, BackHandler} from 'react-native';
 import {validate} from 'email-validator';
 
 import {SWITCH_ENV_CODE} from '../../../Shared/Constants';
@@ -12,6 +12,18 @@ export default class PRESSSignInEmailPage extends React.Component {
   state = {
     email: '',
     errorMessage: null,
+    isBackButtonPressed: false,
+  };
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.navigateBack);
+    setTimeout(() => {
+      this.input.focus();
+    }, 1000);
+  }
+
+  navigateBack = () => {
+    this.setState({isBackButtonPressed: true});
   };
 
   handleChangeText = e => {
@@ -34,20 +46,22 @@ export default class PRESSSignInEmailPage extends React.Component {
 
   handleCloseAlert = () => {
     this.setState({errorMessage: null});
+    this.input.focus();
   };
 
   render() {
-    const {email, errorMessage} = this.state;
+    const {email, errorMessage, isBackButtonPressed} = this.state;
     return (
       <View style={styles.root}>
         {!!errorMessage && this.renderErrorModal()}
         <TextInput
+          ref={ref => (this.input = ref)}
           placeholder="Email Sign In Requested"
-          autoFocus
+          style={styles.textInput}
           placeholderTextColor={Colors.lightGray}
           keyboardType="email-address"
           onChangeText={this.handleChangeText}
-          onSubmitEditing={this.handleSubmit}
+          onEndEditing={!isBackButtonPressed && this.handleSubmit}
           value={email}
         />
       </View>

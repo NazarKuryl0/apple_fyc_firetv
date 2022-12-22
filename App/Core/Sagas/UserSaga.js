@@ -9,7 +9,7 @@ import {
   SET_CLIENT_AUTHORIZATION_HEADER,
   CLEAR_CLIENT_DATA,
 } from '../Store/Client/Actions';
-import {SHOW_LOADER, HIDE_LOADER} from '../Store/Common/Actions';
+import {SHOW_LOADER, HIDE_LOADER, CLEAR_LOADER} from '../Store/Common/Actions';
 import Navigator from '../Services/NavigationService';
 import {userService} from '../Services/UserService';
 
@@ -60,7 +60,7 @@ export function* fetchFYCUser({payload}) {
     Navigator.navigateAndReset('HomePage');
   }
   yield put({
-    type: HIDE_LOADER,
+    type: CLEAR_LOADER,
   });
 }
 
@@ -92,6 +92,6 @@ export function* fetchPRESSUser({payload}) {
     Navigator.navigateAndReset('HomePage');
   }
   yield put({
-    type: HIDE_LOADER,
+    type: CLEAR_LOADER,
   });
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, View, Alert} from 'react-native';
+import {TextInput, View, Alert, BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 
 import Navigator from '../../../Core/Services/NavigationService';
@@ -14,6 +14,18 @@ import {styles} from './styles';
 class PRESSSignInPasswordPage extends React.Component {
   state = {
     password: '',
+    isBackButtonPressed: false,
+  };
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.navigateBack);
+    setTimeout(() => {
+      this.input.focus();
+    }, 1000);
+  }
+
+  navigateBack = () => {
+    this.setState({isBackButtonPressed: true});
   };
 
   handleChangeText = e => {
@@ -34,18 +46,19 @@ class PRESSSignInPasswordPage extends React.Component {
   };
 
   render() {
-    const {password} = this.state;
+    const {password, isBackButtonPressed} = this.state;
     const {fetchUserErrorMessage} = this.props;
     return (
       <View style={styles.root}>
         {!!fetchUserErrorMessage && this.renderErrorModal()}
         <TextInput
-          autoFocus
+          ref={ref => (this.input = ref)}
+          style={styles.textInput}
           value={password}
           placeholder="Password Requested"
           placeholderTextColor={Colors.lightGray}
           onChangeText={this.handleChangeText}
-          onSubmitEditing={this.handleSubmit}
+          onEndEditing={!isBackButtonPressed && this.handleSubmit}
         />
       </View>
     );
