@@ -20,8 +20,6 @@ import {
 import {
   FETCH_SHOW_DATA,
   SET_SHOW_BANNER,
-  CLEAR_SHOW_EPISODES,
-  CLEAR_SELECTED_EPISODE,
   CLEAR_SHOW_DATA,
 } from '../../Core/Store/ShowPage/Actions';
 import {
@@ -62,16 +60,8 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    const {
-      fetchHomePageData,
-      clearShowEpisodes,
-      content,
-      clearShowData,
-      clearSelectedEpisode,
-    } = this.props;
+    const {fetchHomePageData, content, clearShowData} = this.props;
     clearShowData();
-    clearShowEpisodes();
-    clearSelectedEpisode();
     if (!content || !content.length) {
       fetchHomePageData();
     }
@@ -626,19 +616,9 @@ const mapDispatchToProps = dispatch => ({
       },
     });
   },
-  clearShowEpisodes: () => {
-    dispatch({
-      type: CLEAR_SHOW_EPISODES,
-    });
-  },
   clearShowData: () => {
     dispatch({
       type: CLEAR_SHOW_DATA,
-    });
-  },
-  clearSelectedEpisode: () => {
-    dispatch({
-      type: CLEAR_SELECTED_EPISODE,
     });
   },
   setShowBanner: value => {

@@ -8,15 +8,12 @@ import {
 } from '../Store/Client/Actions';
 import {CLEAR_LOADER} from '../Store/Common/Actions';
 import {CLEAR_SELECTED_SHOW} from '../Store/HomePage/Actions';
-import {CLEAR_SHOW_BANNER, CLEAR_SHOW_DATA} from '../Store/ShowPage/Actions';
+import {CLEAR_SHOW_DATA} from '../Store/ShowPage/Actions';
 import {VALIDATE_USER} from '../Store/User/Actions';
 
 export function* startup() {
   yield put({
     type: CLEAR_LOADER,
-  });
-  yield put({
-    type: CLEAR_SHOW_BANNER,
   });
   yield put({
     type: CLEAR_SELECTED_SHOW,
