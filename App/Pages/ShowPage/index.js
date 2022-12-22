@@ -6,10 +6,16 @@ import {
   Image,
   ScrollView,
   findNodeHandle,
+  Alert,
 } from 'react-native';
 import {connect} from 'react-redux';
 
 import {SET_SELECTED_EPISODE} from '../../Core/Store/ShowPage/Actions';
+import {
+  FETCH_VIDEO_DATA,
+  CLEAR_FETCH_VIDEO_DATA_ERROR_MESSAGE,
+} from '../../Core/Store/Video/Actions';
+import {RESET_SHOW_BANNER} from '../../Core/Store/ShowPage/Actions';
 import {BUTTON} from '../../Shared/Constants';
 import {convertShowRuntime} from '../../Shared/Helpers';
 import {Blur, Shadow} from '../../Shared';
@@ -30,7 +36,7 @@ class ShowPage extends React.Component {
   componentDidUpdate() {
     const {isSetUpFirstTimeSeasonRef} = this.state;
     const {showEpisodes} = this.props;
-    if (!isSetUpFirstTimeSeasonRef && showEpisodes.length && this['Season0']) {
+    if (!isSetUpFirstTimeSeasonRef && showEpisodes?.length && this['Season0']) {
       this.setState({isSetUpFirstTimeSeasonRef: true});
       if (showEpisodes.length > 1) {
         this.setState({focusedSeasonRef: this['Season0']});
@@ -39,7 +45,9 @@ class ShowPage extends React.Component {
   }
 
   render() {
-    const {showData, showEpisodes, showBanner} = this.props;
+    const {showData, showEpisodes, showBanner, fetchVideoDataErrorMessage} =
+      this.props;
+    const {showBackground} = showData;
     return (
       <ScrollView
         contentContainerStyle={styles.root}
@@ -47,14 +55,16 @@ class ShowPage extends React.Component {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         bounces={false}>
-        {!!showBanner && (
+        {fetchVideoDataErrorMessage &&
+          this.renderErrorModal(fetchVideoDataErrorMessage)}
+        {!!showBackground && (
           <View>
             <FastImage
-              source={{uri: showBanner, priority: FastImage.priority.high}}
+              source={{uri: showBackground, priority: FastImage.priority.high}}
               style={styles.background}
             />
             <Image
-              source={{uri: showBanner}}
+              source={{uri: showBackground}}
               blurRadius={50}
               style={[styles.background, styles.backgroundSecond]}
             />
@@ -73,6 +83,20 @@ class ShowPage extends React.Component {
       </ScrollView>
     );
   }
+
+  handleCloseAlert = () => {
+    const {clearFetchVideoDataErrorMessage} = this.props;
+    clearFetchVideoDataErrorMessage();
+  };
+
+  renderErrorModal = fetchVideoErrorMessage => {
+    Alert.alert(fetchVideoErrorMessage, '', [
+      {
+        text: 'OK',
+        onPress: this.handleCloseAlert,
+      },
+    ]);
+  };
 
   handleButtonFocus = () => {
     this.main.scrollTo({y: 0, animated: true});
@@ -137,8 +161,10 @@ class ShowPage extends React.Component {
   };
 
   handleEpisodePress = value => {
-    const {setSelectedEpsiode} = this.props;
+    const {setSelectedEpsiode, fetchVideoData, resetShowBanner} = this.props;
+    resetShowBanner();
     setSelectedEpsiode(value);
+    fetchVideoData(value);
   };
 
   handleEpisodeFocus = value => {
@@ -248,10 +274,11 @@ class ShowPage extends React.Component {
   };
 }
 
-const mapStateToProps = ({show}) => ({
+const mapStateToProps = ({show, video}) => ({
   showData: show.showData,
   showEpisodes: show.showEpisodes,
   showBanner: show.showBanner,
+  fetchVideoDataErrorMessage: video.fetchVideoDataErrorMessage,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -259,6 +286,22 @@ const mapDispatchToProps = dispatch => ({
     dispatch({
       type: SET_SELECTED_EPISODE,
       payload: value,
+    });
+  },
+  resetShowBanner: () => {
+    dispatch({
+      type: RESET_SHOW_BANNER,
+    });
+  },
+  fetchVideoData: value => {
+    dispatch({
+      type: FETCH_VIDEO_DATA,
+      payload: value,
+    });
+  },
+  clearFetchVideoDataErrorMessage: () => {
+    dispatch({
+      type: CLEAR_FETCH_VIDEO_DATA_ERROR_MESSAGE,
     });
   },
 });

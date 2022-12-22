@@ -20,6 +20,7 @@ import {
 import {
   FETCH_SHOW_DATA,
   SET_SHOW_BANNER,
+  CLEAR_SHOW_EPISODES,
 } from '../../Core/Store/ShowPage/Actions';
 import {
   PRESS,
@@ -59,7 +60,9 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    const {fetchHomePageData, needUpdateHomePageData} = this.props;
+    const {fetchHomePageData, needUpdateHomePageData, clearShowEpisodes} =
+      this.props;
+    clearShowEpisodes();
     if (needUpdateHomePageData) {
       fetchHomePageData();
     }
@@ -213,7 +216,7 @@ class HomePage extends React.Component {
                 activeOpacity={1}
                 key={item}
                 ref={ref => (this[item] = ref)}
-                hasTVPreferredFocus={item === ALL && needUpdateHomePageData}
+                hasTVPreferredFocus={needUpdateHomePageData && item === ALL}
                 style={[
                   styles.headerBlockItem,
                   focusedHeaderItem === item &&
@@ -310,7 +313,7 @@ class HomePage extends React.Component {
       this.props;
     setShowBanner(showBackground);
     setNeedUpdateHomePageDataToFalse();
-    fetchShowData(slug);
+    fetchShowData(slug, showBackground);
   };
 
   renderItem = ({item, index}, categoryIndex) => {
@@ -608,12 +611,18 @@ const mapDispatchToProps = dispatch => ({
       type: FETCH_HOME_PAGE_DATA,
     });
   },
-  fetchShowData: showSlug => {
+  fetchShowData: (showSlug, showBackground) => {
     dispatch({
       type: FETCH_SHOW_DATA,
       payload: {
         showSlug,
+        showBackground,
       },
+    });
+  },
+  clearShowEpisodes: () => {
+    dispatch({
+      type: CLEAR_SHOW_EPISODES,
     });
   },
   setNeedUpdateHomePageDataToFalse: () => {

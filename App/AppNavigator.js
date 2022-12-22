@@ -9,6 +9,7 @@ import {
   PRESSSignInPasswordPage,
   HomePage,
   ShowPage,
+  EpisodePage,
 } from './Pages';
 
 let routeConfigMap = {
@@ -20,6 +21,7 @@ let routeConfigMap = {
   PRESSSignInPasswordPage,
   HomePage,
   ShowPage,
+  EpisodePage,
 };
 
 const StackNavigator = createStackNavigator(routeConfigMap, {

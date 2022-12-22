@@ -6,6 +6,7 @@ import {
   SET_SHOW_BANNER,
   RESET_SHOW_BANNER,
   SET_SELECTED_EPISODE,
+  CLEAR_SHOW_EPISODES,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -56,6 +57,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedEpisode: action.payload,
+      };
+    case CLEAR_SHOW_EPISODES:
+      return {
+        ...state,
+        showEpisodes: null,
       };
     default:
       return state;

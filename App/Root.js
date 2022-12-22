@@ -10,9 +10,9 @@ import {
   SET_CLIENT_AUTHORIZATION_HEADER,
   CHANGE_CLIENT_REFERER,
 } from './Core/Store/Client/Actions';
+import {RESET_SHOW_BANNER} from './Core/Store/ShowPage/Actions';
 import NavigationService from './Core/Services/NavigationService';
 import AppNavigator from './AppNavigator';
-import {RESET_SHOW_BANNER} from './Core/Store/ShowPage/Actions';
 
 class RootScreen extends Component {
   componentDidMount() {

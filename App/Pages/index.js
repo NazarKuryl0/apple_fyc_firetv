@@ -5,6 +5,7 @@ import PRESSSignInEmailPage from './WelcomePage/PRESSSignInEmailPage';
 import PRESSSignInPasswordPage from './WelcomePage/PRESSSignInPasswordPage';
 import HomePage from './HomePage';
 import ShowPage from './ShowPage';
+import EpisodePage from './EpisodePage';
 
 export {
   WelcomePage,
@@ -14,4 +15,5 @@ export {
   PRESSSignInPasswordPage,
   HomePage,
   ShowPage,
+  EpisodePage,
 };

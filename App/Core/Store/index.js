@@ -7,6 +7,7 @@ import {reducer as clientReducer} from './Client/Reducers';
 import {reducer as commonReducer} from './Common/Reducers';
 import {reducer as homePageReducer} from './HomePage/Reducers';
 import {reducer as showPageReducer} from './ShowPage/Reducers';
+import {reducer as videoReducer} from './Video/Reducer';
 
 export default () => {
   const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ export default () => {
     common: commonReducer,
     home: homePageReducer,
     show: showPageReducer,
+    video: videoReducer,
   });
   return configureStore(rootReducer, rootSaga);
 };
