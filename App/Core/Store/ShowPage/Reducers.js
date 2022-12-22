@@ -5,6 +5,7 @@ import {
   FETCH_SHOW_EPISODES_DATA_SUCCESS,
   SET_SHOW_BANNER,
   RESET_SHOW_BANNER,
+  SET_SELECTED_EPISODE,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -16,6 +17,7 @@ const reducer = (state = initialState, action) => {
         showData: action.payload,
         fetchShowError: null,
         fetchShowEpisodesError: null,
+        selectedEpisode: null,
       };
     case FETCH_SHOW_DATA_FAILED:
       return {
@@ -25,12 +27,14 @@ const reducer = (state = initialState, action) => {
         fetchShowEpisodesError: null,
         showBanner: null,
         showEpisodes: null,
+        selectedEpisode: null,
       };
     case FETCH_SHOW_EPISODES_DATA_FAILED:
       return {
         ...state,
         fetchShowEpisodesError: action.payload,
         showEpisodes: null,
+        selectedEpisode: null,
       };
     case FETCH_SHOW_EPISODES_DATA_SUCCESS:
       return {
@@ -47,6 +51,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         showBanner: null,
+      };
+    case SET_SELECTED_EPISODE:
+      return {
+        ...state,
+        selectedEpisode: action.payload,
       };
     default:
       return state;

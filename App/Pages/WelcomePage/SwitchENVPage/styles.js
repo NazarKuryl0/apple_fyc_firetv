@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemText: {
-    color: Colors.white,
+    color: Colors.black,
     marginLeft: 10,
   }
 });

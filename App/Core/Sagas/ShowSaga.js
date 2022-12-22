@@ -38,10 +38,12 @@ export function* fetchShowData({payload}) {
           payload: showEpisodesData.message,
         });
       } else {
-        episodesDataToDisplay = [{
-          seasonName: WATCH_NOW,
-          seasonEpisodes: showEpisodesData.data,
-        }];
+        episodesDataToDisplay = [
+          {
+            seasonName: WATCH_NOW,
+            seasonEpisodes: showEpisodesData.data,
+          },
+        ];
         yield put({
           type: FETCH_SHOW_EPISODES_DATA_SUCCESS,
           payload: episodesDataToDisplay,

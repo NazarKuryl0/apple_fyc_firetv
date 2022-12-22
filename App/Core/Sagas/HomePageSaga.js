@@ -27,9 +27,7 @@ export function* fetchHomePageData() {
     });
   } else {
     const filteredData = data.data.filter(
-      item =>
-        item.module.slug === 'apple-fyc-series' ||
-        item.module.slug === 'apple-fyc-film',
+      item => item.module.type === 'title_grid',
     );
     const dataToDisplay = filteredData.map(item => {
       return {

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 
+import {SET_SELECTED_EPISODE} from '../../Core/Store/ShowPage/Actions';
 import {BUTTON} from '../../Shared/Constants';
 import {convertShowRuntime} from '../../Shared/Helpers';
 import {Blur, Shadow} from '../../Shared';
@@ -135,6 +136,11 @@ class ShowPage extends React.Component {
     this.setState({focusedSeason: value, focusedSeasonRef: ref});
   };
 
+  handleEpisodePress = value => {
+    const {setSelectedEpsiode} = this.props;
+    setSelectedEpsiode(value);
+  };
+
   handleEpisodeFocus = value => {
     this.main.scrollToEnd({animated: true});
     this.setState({focusedItem: value});
@@ -199,6 +205,7 @@ class ShowPage extends React.Component {
                     styles.lastItem,
                 ]}
                 nextFocusUp={findNodeHandle(focusedSeasonRef)}
+                onPress={this.handleEpisodePress.bind(this, episode)}
                 onFocus={this.handleEpisodeFocus.bind(this, name)}>
                 <Image
                   resizeMode="contain"
@@ -247,6 +254,13 @@ const mapStateToProps = ({show}) => ({
   showBanner: show.showBanner,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  setSelectedEpsiode: value => {
+    dispatch({
+      type: SET_SELECTED_EPISODE,
+      payload: value,
+    });
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowPage);

@@ -4,4 +4,5 @@ export const initialState = {
   fetchShowEpisodesError: null,
   showEpisodes: null,
   showBanner: null,
+  selectedEpisode: null,
 };
