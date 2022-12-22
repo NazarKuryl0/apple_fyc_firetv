@@ -7,6 +7,8 @@ import {
   FETCH_PRESS_USER,
   CLEAR_FETCH_FYC_USER_ERROR_MESSAGE,
 } from '../../../Core/Store/User/Actions';
+import {Colors} from '../../../Shared';
+
 import {styles} from './styles';
 
 class PRESSSignInPasswordPage extends React.Component {
@@ -36,11 +38,12 @@ class PRESSSignInPasswordPage extends React.Component {
     const {fetchUserErrorMessage} = this.props;
     return (
       <View style={styles.root}>
-        {fetchUserErrorMessage && this.renderErrorModal()}
+        {!!fetchUserErrorMessage && this.renderErrorModal()}
         <TextInput
           autoFocus
           value={password}
           placeholder="Password Requested"
+          placeholderTextColor={Colors.lightGray}
           onChangeText={this.handleChangeText}
           onSubmitEditing={this.handleSubmit}
         />

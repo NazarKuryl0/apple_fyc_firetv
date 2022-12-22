@@ -7,6 +7,7 @@ import {
   CLEAR_FETCH_FYC_USER_ERROR_MESSAGE,
 } from '../../../Core/Store/User/Actions';
 import {SWITCH_ENV_CODE} from '../../../Shared/Constants';
+import {Colors} from '../../../Shared';
 import Navigator from '../../../Core/Services/NavigationService';
 import {styles} from './styles';
 
@@ -41,12 +42,13 @@ class FYCSignInPage extends React.Component {
     const {fetchUserErrorMessage} = this.props;
     return (
       <View style={styles.root}>
-        {fetchUserErrorMessage && this.renderErrorModal()}
+        {!!fetchUserErrorMessage && this.renderErrorModal()}
         <TextInput
           ref={ref => (this.input = ref)}
           autoFocus
           value={code}
           placeholder="Enter Code"
+          placeholderTextColor={Colors.lightGray}
           onChangeText={this.handleChangeText}
           onSubmitEditing={this.handleSubmit}
         />

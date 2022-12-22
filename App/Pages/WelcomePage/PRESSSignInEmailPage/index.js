@@ -4,6 +4,8 @@ import {validate} from 'email-validator';
 
 import {SWITCH_ENV_CODE} from '../../../Shared/Constants';
 import Navigator from '../../../Core/Services/NavigationService';
+import {Colors} from '../../../Shared';
+
 import {styles} from './styles';
 
 export default class PRESSSignInEmailPage extends React.Component {
@@ -38,10 +40,11 @@ export default class PRESSSignInEmailPage extends React.Component {
     const {email, errorMessage} = this.state;
     return (
       <View style={styles.root}>
-        {errorMessage && this.renderErrorModal()}
+        {!!errorMessage && this.renderErrorModal()}
         <TextInput
           placeholder="Email Sign In Requested"
           autoFocus
+          placeholderTextColor={Colors.lightGray}
           keyboardType="email-address"
           onChangeText={this.handleChangeText}
           onSubmitEditing={this.handleSubmit}
