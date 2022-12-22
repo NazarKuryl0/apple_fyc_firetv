@@ -40,6 +40,7 @@ export function* fetchVideoData({payload}) {
       payload: {
         videoSource,
         drmInfo,
+        wm: data.data.wm,
       },
     });
   }
