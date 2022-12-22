@@ -60,10 +60,9 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    const {fetchHomePageData, needUpdateHomePageData, clearShowEpisodes} =
-      this.props;
+    const {fetchHomePageData, clearShowEpisodes, content} = this.props;
     clearShowEpisodes();
-    if (needUpdateHomePageData) {
+    if (!content || !content.length) {
       fetchHomePageData();
     }
     this[ALL].setNativeProps({
@@ -204,7 +203,7 @@ class HomePage extends React.Component {
 
   renderHeader = () => {
     const {focusedHeaderItem, isFocusedHeaderItem} = this.state;
-    const {isFYCContent, needUpdateHomePageData} = this.props;
+    const {isFYCContent} = this.props;
     return (
       <View style={styles.headerBlock}>
         {isFYCContent ? <FYCLogo /> : <Text accessible={false}>{PRESS}</Text>}
@@ -216,7 +215,7 @@ class HomePage extends React.Component {
                 activeOpacity={1}
                 key={item}
                 ref={ref => (this[item] = ref)}
-                hasTVPreferredFocus={false && item === ALL}
+                hasTVPreferredFocus={item === ALL}
                 style={[
                   styles.headerBlockItem,
                   focusedHeaderItem === item &&
@@ -309,16 +308,15 @@ class HomePage extends React.Component {
   };
 
   handleShowPress = (slug, showBackground) => {
-    const {fetchShowData, setNeedUpdateHomePageDataToFalse, setShowBanner} =
+    const {fetchShowData, setShowBanner} =
       this.props;
     setShowBanner(showBackground);
-    setNeedUpdateHomePageDataToFalse();
     fetchShowData(slug, showBackground);
   };
 
   renderItem = ({item, index}, categoryIndex) => {
     const {focusedShow, isFocusedHeaderItem} = this.state;
-    const {needUpdateHomePageData, showSlug} = this.props;
+    const {showSlug} = this.props;
     const {scaleValue} = this.state;
     const cardScale = scaleValue.interpolate({
       inputRange: [0, 1],
@@ -329,7 +327,7 @@ class HomePage extends React.Component {
       <TouchableOpacity
         activeOpacity={1}
         ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
-        hasTVPreferredFocus={needUpdateHomePageData}
+        hasTVPreferredFocus={item.slug === showSlug}
         onFocus={this.handleShowFocus.bind(
           this,
           item.title_name,
@@ -600,7 +598,6 @@ class HomePage extends React.Component {
 const mapStateToProps = ({home, client, show}) => ({
   content: home.content,
   contentWithGenres: home.contentWithGenres,
-  needUpdateHomePageData: home.needUpdateHomePageData,
   showSlug: show.showData?.showSlug,
   isFYCContent: client.isFYCContent,
 });
@@ -623,11 +620,6 @@ const mapDispatchToProps = dispatch => ({
   clearShowEpisodes: () => {
     dispatch({
       type: CLEAR_SHOW_EPISODES,
-    });
-  },
-  setNeedUpdateHomePageDataToFalse: () => {
-    dispatch({
-      type: SET_NEED_UPDATE_HOME_PAGE_DATA_TO_FALSE,
     });
   },
   setShowBanner: value => {

@@ -10,7 +10,6 @@ import {
   CLEAR_CLIENT_DATA,
 } from '../Store/Client/Actions';
 import {SHOW_LOADER, HIDE_LOADER} from '../Store/Common/Actions';
-import {SET_NEED_UPDATE_HOME_PAGE_DATA_TO_TRUE} from '../Store/HomePage/Actions';
 import Navigator from '../Services/NavigationService';
 import {userService} from '../Services/UserService';
 
@@ -20,9 +19,6 @@ export function* validateUser() {
   });
   const {data} = yield call(() => userService.validateUser());
   if (data.success) {
-    yield put({
-      type: SET_NEED_UPDATE_HOME_PAGE_DATA_TO_TRUE,
-    });
     Navigator.navigateAndReset('HomePage');
   } else {
     yield put({
