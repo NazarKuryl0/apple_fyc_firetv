@@ -5,4 +5,5 @@ export const initialState = {
   showEpisodes: null,
   showBanner: null,
   selectedEpisode: null,
+  selectedShow: null,
 };

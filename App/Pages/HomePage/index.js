@@ -13,14 +13,14 @@ import {
 import {connect} from 'react-redux';
 
 import FYCLogo from '../../Assets/Images/FYCLogo';
-import {
-  FETCH_HOME_PAGE_DATA,
-  SET_NEED_UPDATE_HOME_PAGE_DATA_TO_FALSE,
-} from '../../Core/Store/HomePage/Actions';
+import {FETCH_HOME_PAGE_DATA} from '../../Core/Store/HomePage/Actions';
 import {
   FETCH_SHOW_DATA,
   SET_SHOW_BANNER,
   CLEAR_SHOW_EPISODES,
+  CLEAR_SELECTED_EPISODE,
+  SET_SELECTED_SHOW,
+  CLEAR_SHOW_DATA,
 } from '../../Core/Store/ShowPage/Actions';
 import {
   PRESS,
@@ -60,8 +60,16 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    const {fetchHomePageData, clearShowEpisodes, content} = this.props;
+    const {
+      fetchHomePageData,
+      clearShowEpisodes,
+      content,
+      clearShowData,
+      clearSelectedEpisode,
+    } = this.props;
+    clearShowData();
     clearShowEpisodes();
+    clearSelectedEpisode();
     if (!content || !content.length) {
       fetchHomePageData();
     }
@@ -203,7 +211,7 @@ class HomePage extends React.Component {
 
   renderHeader = () => {
     const {focusedHeaderItem, isFocusedHeaderItem} = this.state;
-    const {isFYCContent} = this.props;
+    const {isFYCContent, selectedShow} = this.props;
     return (
       <View style={styles.headerBlock}>
         {isFYCContent ? <FYCLogo /> : <Text accessible={false}>{PRESS}</Text>}
@@ -215,7 +223,7 @@ class HomePage extends React.Component {
                 activeOpacity={1}
                 key={item}
                 ref={ref => (this[item] = ref)}
-                hasTVPreferredFocus={item === ALL}
+                hasTVPreferredFocus={!selectedShow && item === ALL}
                 style={[
                   styles.headerBlockItem,
                   focusedHeaderItem === item &&
@@ -308,16 +316,15 @@ class HomePage extends React.Component {
   };
 
   handleShowPress = (slug, showBackground) => {
-    const {fetchShowData, setShowBanner} =
-      this.props;
+    const {fetchShowData, setShowBanner, setSelectedShow} = this.props;
     setShowBanner(showBackground);
+    setSelectedShow(slug);
     fetchShowData(slug, showBackground);
   };
 
   renderItem = ({item, index}, categoryIndex) => {
-    const {focusedShow, isFocusedHeaderItem} = this.state;
-    const {showSlug} = this.props;
-    const {scaleValue} = this.state;
+    const {focusedShow, isFocusedHeaderItem, scaleValue} = this.state;
+    const {selectedShow} = this.props;
     const cardScale = scaleValue.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 1.05],
@@ -327,7 +334,7 @@ class HomePage extends React.Component {
       <TouchableOpacity
         activeOpacity={1}
         ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
-        hasTVPreferredFocus={item.slug === showSlug}
+        hasTVPreferredFocus={selectedShow === item.slug}
         onFocus={this.handleShowFocus.bind(
           this,
           item.title_name,
@@ -598,7 +605,7 @@ class HomePage extends React.Component {
 const mapStateToProps = ({home, client, show}) => ({
   content: home.content,
   contentWithGenres: home.contentWithGenres,
-  showSlug: show.showData?.showSlug,
+  selectedShow: show.selectedShow,
   isFYCContent: client.isFYCContent,
 });
 
@@ -622,9 +629,25 @@ const mapDispatchToProps = dispatch => ({
       type: CLEAR_SHOW_EPISODES,
     });
   },
+  clearShowData: () => {
+    dispatch({
+      type: CLEAR_SHOW_DATA,
+    });
+  },
+  clearSelectedEpisode: () => {
+    dispatch({
+      type: CLEAR_SELECTED_EPISODE,
+    });
+  },
   setShowBanner: value => {
     dispatch({
       type: SET_SHOW_BANNER,
+      payload: value,
+    });
+  },
+  setSelectedShow: value => {
+    dispatch({
+      type: SET_SELECTED_SHOW,
       payload: value,
     });
   },

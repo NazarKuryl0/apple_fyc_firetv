@@ -7,7 +7,11 @@ import {
   CLEAR_CLIENT_DATA,
 } from '../Store/Client/Actions';
 import {CLEAR_LOADER} from '../Store/Common/Actions';
-import {CLEAR_SHOW_BANNER} from '../Store/ShowPage/Actions';
+import {
+  CLEAR_SHOW_BANNER,
+  CLEAR_SELECTED_SHOW,
+  CLEAR_SHOW_DATA,
+} from '../Store/ShowPage/Actions';
 import {VALIDATE_USER} from '../Store/User/Actions';
 
 export function* startup() {
@@ -16,6 +20,12 @@ export function* startup() {
   });
   yield put({
     type: CLEAR_SHOW_BANNER,
+  });
+  yield put({
+    type: CLEAR_SELECTED_SHOW,
+  });
+  yield put({
+    type: CLEAR_SHOW_DATA,
   });
 
   const {
