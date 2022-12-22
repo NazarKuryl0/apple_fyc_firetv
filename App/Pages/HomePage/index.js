@@ -216,7 +216,7 @@ class HomePage extends React.Component {
                 activeOpacity={1}
                 key={item}
                 ref={ref => (this[item] = ref)}
-                hasTVPreferredFocus={needUpdateHomePageData && item === ALL}
+                hasTVPreferredFocus={false && item === ALL}
                 style={[
                   styles.headerBlockItem,
                   focusedHeaderItem === item &&
@@ -329,7 +329,7 @@ class HomePage extends React.Component {
       <TouchableOpacity
         activeOpacity={1}
         ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
-        hasTVPreferredFocus={!needUpdateHomePageData && item.slug === showSlug}
+        hasTVPreferredFocus={needUpdateHomePageData}
         onFocus={this.handleShowFocus.bind(
           this,
           item.title_name,

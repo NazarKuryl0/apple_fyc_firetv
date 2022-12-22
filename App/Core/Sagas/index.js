@@ -1,5 +1,6 @@
 import {takeLatest, all} from 'redux-saga/effects';
 
+import {STARTUP} from '../Store/Startup/Actions';
 import {
   FETCH_FYC_USER,
   FETCH_PRESS_USER,
@@ -15,6 +16,7 @@ import {FETCH_HOME_PAGE_DATA} from '../Store/HomePage/Actions';
 import {FETCH_SHOW_DATA} from '../Store/ShowPage/Actions';
 import {FETCH_VIDEO_DATA} from '../Store/Video/Actions';
 
+import {startup} from './StartupSaga';
 import {fetchFYCUser, fetchPRESSUser, validateUser} from './UserSaga';
 import {
   changeClientENV,
@@ -27,6 +29,8 @@ import {fetchShowData} from './ShowSaga';
 import {fetchVideoData} from './VideoSaga';
 
 export default function* root() {
+  yield all([takeLatest(STARTUP, startup)]);
+
   yield all([takeLatest(VALIDATE_USER, validateUser)]);
   yield all([takeLatest(FETCH_FYC_USER, fetchFYCUser)]);
   yield all([takeLatest(FETCH_PRESS_USER, fetchPRESSUser)]);
