@@ -2,7 +2,8 @@ import {
   FETCH_HOME_PAGE_DATA_SUCCESS,
   FETCH_HOME_PAGE_DATA_FAILED,
   SET_SELECTED_SHOW,
-  CLEAR_SELECTED_SHOW,
+  CLEAR_HOME_PAGE_DATA,
+  SET_OFFSET,
 } from './Actions';
 import {initialState} from './InitialState';
 
@@ -28,11 +29,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedShow: action.payload,
       };
-    case CLEAR_SELECTED_SHOW:
+    case SET_OFFSET:
       return {
         ...state,
-        selectedShow: action.payload,
+        offset: action.payload,
       };
+    case CLEAR_HOME_PAGE_DATA:
+      return initialState;
 
     default:
       return state;

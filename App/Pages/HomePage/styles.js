@@ -63,6 +63,8 @@ export const styles = StyleSheet.create({
       width: '100%',
       paddingTop: 10,
       paddingHorizontal: 40,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
     },
     itemBlock: {
       height: (210 * 9) / 16 + 40,

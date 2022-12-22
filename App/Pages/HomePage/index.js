@@ -6,7 +6,6 @@ import {
   Image,
   ScrollView,
   findNodeHandle,
-  FlatList,
   Animated,
   Easing,
 } from 'react-native';
@@ -15,6 +14,7 @@ import {connect} from 'react-redux';
 import FYCLogo from '../../Assets/Images/FYCLogo';
 import {
   FETCH_HOME_PAGE_DATA,
+  SET_OFFSET,
   SET_SELECTED_SHOW,
 } from '../../Core/Store/HomePage/Actions';
 import {
@@ -42,6 +42,7 @@ const centerHeaderItems = [ALL, CATEGORY, FAQ];
 
 class HomePage extends React.Component {
   state = {
+    offset: this.props.offset,
     focusedHeaderItem: ALL,
     isFocusedHeaderItem: true,
     scaleValue: new Animated.Value(0),
@@ -138,9 +139,11 @@ class HomePage extends React.Component {
 
   render() {
     const {focusedHeaderItem} = this.state;
-    const {content, contentWithGenres, isFYCContent} = this.props;
+    const {content, contentWithGenres, isFYCContent, offset} = this.props;
     return (
       <ScrollView
+        contentOffset={{y: offset}}
+        onScroll={this.handleScroll}
         ref={ref => (this.mainScroll = ref)}
         showsVerticalScrollIndicator={false}
         style={styles.root}
@@ -156,6 +159,10 @@ class HomePage extends React.Component {
       </ScrollView>
     );
   }
+
+  handleScroll = e => {
+    this.setState({offset: e.nativeEvent.contentOffset.y});
+  };
 
   handleHeaderItemFocus = item => {
     this.setState({
@@ -308,13 +315,16 @@ class HomePage extends React.Component {
   };
 
   handleShowPress = (slug, showBackground) => {
-    const {fetchShowData, setShowBanner, setSelectedShow} = this.props;
+    const {offset} = this.state;
+    const {fetchShowData, setShowBanner, setSelectedShow, setOffset} =
+      this.props;
     setShowBanner(showBackground);
+    setOffset(offset);
     setSelectedShow(slug);
     fetchShowData(slug, showBackground);
   };
 
-  renderItem = ({item, index}, categoryIndex) => {
+  renderAllContent = content => {
     const {focusedShow, isFocusedHeaderItem, scaleValue} = this.state;
     const {selectedShow} = this.props;
     const cardScale = scaleValue.interpolate({
@@ -322,45 +332,6 @@ class HomePage extends React.Component {
       outputRange: [1, 1.05],
     });
     let transformStyle = {transform: [{scale: cardScale}]};
-    return (
-      <TouchableOpacity
-        activeOpacity={1}
-        ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
-        hasTVPreferredFocus={selectedShow === item.slug}
-        onFocus={this.handleShowFocus.bind(
-          this,
-          item.title_name,
-          this[`Show${categoryIndex}${index}`],
-        )}
-        onBlur={this.handleBlur}
-        onPress={this.handleShowPress.bind(this, item.slug, item.images.image)}
-        style={[
-          styles.allContent.itemBlock,
-          index % 4 === 3 && styles.itemBlockWithoutMargin,
-        ]}>
-        <Animated.Image
-          resizeMode="contain"
-          source={{
-            uri: `${item.images.thumb}${styles.allContent.itemBlock.width}`,
-          }}
-          style={[
-            styles.allContent.itemImage,
-            focusedShow === item.title_name && transformStyle,
-          ]}
-        />
-        {focusedShow === item.title_name && !isFocusedHeaderItem && (
-          <Text
-            numberOfLines={2}
-            accessible={false}
-            style={styles.allContent.itemText}>
-            {item.title_name}
-          </Text>
-        )}
-      </TouchableOpacity>
-    );
-  };
-
-  renderAllContent = content => {
     return (
       <View>
         <Image
@@ -374,13 +345,48 @@ class HomePage extends React.Component {
             <Text accessible={false} style={styles.allContent.headerText}>
               {category.name}
             </Text>
-            <FlatList
-              data={category.content}
-              numColumns={4}
-              initialNumToRender={2}
-              contentContainerStyle={styles.allContent.categoryBlock}
-              renderItem={e => this.renderItem(e, categoryIndex)}
-            />
+            <View style={styles.allContent.categoryBlock}>
+              {category.content.map((item, index) => (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  ref={ref => (this[`Show${categoryIndex}${index}`] = ref)}
+                  hasTVPreferredFocus={selectedShow === item.slug}
+                  onFocus={this.handleShowFocus.bind(
+                    this,
+                    item.title_name,
+                    this[`Show${categoryIndex}${index}`],
+                  )}
+                  onBlur={this.handleBlur}
+                  onPress={this.handleShowPress.bind(
+                    this,
+                    item.slug,
+                    item.images.image,
+                  )}
+                  style={[
+                    styles.allContent.itemBlock,
+                    index % 4 === 3 && styles.itemBlockWithoutMargin,
+                  ]}>
+                  <Animated.Image
+                    resizeMode="contain"
+                    source={{
+                      uri: `${item.images.thumb}${styles.allContent.itemBlock.width}`,
+                    }}
+                    style={[
+                      styles.allContent.itemImage,
+                      focusedShow === item.title_name && transformStyle,
+                    ]}
+                  />
+                  {focusedShow === item.title_name && !isFocusedHeaderItem && (
+                    <Text
+                      numberOfLines={2}
+                      accessible={false}
+                      style={styles.allContent.itemText}>
+                      {item.title_name}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         ))}
       </View>
@@ -598,6 +604,7 @@ const mapStateToProps = ({home, client}) => ({
   content: home.content,
   contentWithGenres: home.contentWithGenres,
   selectedShow: home.selectedShow,
+  offset: home.offset,
   isFYCContent: client.isFYCContent,
 });
 
@@ -624,6 +631,12 @@ const mapDispatchToProps = dispatch => ({
   setShowBanner: value => {
     dispatch({
       type: SET_SHOW_BANNER,
+      payload: value,
+    });
+  },
+  setOffset: value => {
+    dispatch({
+      type: SET_OFFSET,
       payload: value,
     });
   },

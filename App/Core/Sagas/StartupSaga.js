@@ -7,7 +7,7 @@ import {
   CLEAR_CLIENT_DATA,
 } from '../Store/Client/Actions';
 import {CLEAR_LOADER} from '../Store/Common/Actions';
-import {CLEAR_SELECTED_SHOW} from '../Store/HomePage/Actions';
+import {CLEAR_HOME_PAGE_DATA} from '../Store/HomePage/Actions';
 import {CLEAR_SHOW_DATA} from '../Store/ShowPage/Actions';
 import {VALIDATE_USER} from '../Store/User/Actions';
 
@@ -16,7 +16,7 @@ export function* startup() {
     type: CLEAR_LOADER,
   });
   yield put({
-    type: CLEAR_SELECTED_SHOW,
+    type: CLEAR_HOME_PAGE_DATA,
   });
   yield put({
     type: CLEAR_SHOW_DATA,
