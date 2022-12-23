@@ -18,10 +18,10 @@ class EpsiodePage extends React.Component {
     const drmInfo = videoData?.drmInfo;
     const wm = videoData?.wm;
     return (
-      <View style={styles.root}>
+      <View>
         {!!videoSource && (
           <Video
-            resizeMode="contain"
+            resizeMode='cover'
             source={{
               uri: videoSource,
             }}
