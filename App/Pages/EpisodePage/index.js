@@ -37,7 +37,7 @@ class EpsiodePage extends React.Component {
   renderWM = wm => {
     const {content} = wm[0];
     const wmStyles = {
-      fontSize: 2*(+wm[0].font_size),
+      fontSize: 2 * +wm[0].font_size,
       color: wm[0].font_color,
     };
     return (

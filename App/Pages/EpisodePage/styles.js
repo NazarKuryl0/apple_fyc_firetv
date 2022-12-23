@@ -1,8 +1,11 @@
 import {StyleSheet} from 'react-native';
 
+import {WIDTH, HEIGHT} from '../../Shared/Constants';
+
 export const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    width: WIDTH,
+    height: HEIGHT,
   },
   videoBlock: {
     width: '100%',
