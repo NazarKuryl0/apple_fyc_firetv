@@ -3,6 +3,11 @@ import {ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 
 import {FETCH_HOME_PAGE_DATA} from '../../Core/Store/HomePage/Actions';
+import {
+  FETCH_SHOW_DATA,
+  SET_SHOW_BANNER,
+  CLEAR_SHOW_DATA,
+} from '../../Core/Store/ShowPage/Actions';
 import {ALL, CATEGORY, FAQ, FAQ_FYC, FAQ_PRESS} from '../../Shared/Constants';
 
 import Header from './Header';
@@ -23,8 +28,11 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    const {fetchHomePageData} = this.props;
-    fetchHomePageData();
+    const {fetchHomePageData, clearShowData, content} = this.props;
+    if (!content || !content.length) {
+      fetchHomePageData();
+    }
+    clearShowData();
   }
 
   handleHeaderItemPress = (item, ref) => {
@@ -59,12 +67,21 @@ class HomePage extends React.Component {
       focusedGenreRef,
       focusedFAQItemRef,
       selectedHeaderItemRef,
+      offset,
     } = this.state;
-    const {isFYCContent, content, contentWithGenres} = this.props;
+    const {
+      isFYCContent,
+      content,
+      contentWithGenres,
+      fetchShowData,
+      setShowBanner,
+      selectedShow,
+    } = this.props;
     return (
       <ScrollView
         style={styles.root}
         showsVerticalScrollIndicator={false}
+        onScroll={this.handleScroll}
         fadingEdgeLength={100}>
         <Header
           isFYCContent={isFYCContent}
@@ -82,6 +99,10 @@ class HomePage extends React.Component {
             content={content}
             selectedHeaderItemRef={selectedHeaderItemRef}
             focusedShow={focusedShow}
+            offset={offset}
+            selectedShow={selectedShow}
+            fetchShowData={fetchShowData}
+            setShowBanner={setShowBanner}
             changeFocusedShow={this.changeFocusedShow}
             changeIsFocusedHeaderItemValue={this.changeIsFocusedHeaderItemValue}
           />
@@ -92,6 +113,8 @@ class HomePage extends React.Component {
             isFocusedHeaderItem={isFocusedHeaderItem}
             selectedHeaderItemRef={selectedHeaderItemRef}
             focusedGenreRef={focusedGenreRef}
+            fetchShowData={fetchShowData}
+            setShowBanner={setShowBanner}
             changeIsFocusedHeaderItemValue={this.changeIsFocusedHeaderItemValue}
             changeFocusedGenreRef={this.changeFocusedGenreRef}
           />
@@ -114,12 +137,33 @@ const mapStateToProps = ({client, home}) => ({
   isFYCContent: client.isFYCContent,
   content: home.content,
   contentWithGenres: home.contentWithGenres,
+  selectedShow: home.selectedShow,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchHomePageData: () => {
     dispatch({
       type: FETCH_HOME_PAGE_DATA,
+    });
+  },
+  fetchShowData: (showSlug, showBackground) => {
+    dispatch({
+      type: FETCH_SHOW_DATA,
+      payload: {
+        showSlug,
+        showBackground,
+      },
+    });
+  },
+  setShowBanner: value => {
+    dispatch({
+      type: SET_SHOW_BANNER,
+      payload: value,
+    });
+  },
+  clearShowData: () => {
+    dispatch({
+      type: CLEAR_SHOW_DATA,
     });
   },
 });

@@ -61,6 +61,12 @@ export default class CategoriesComponent extends React.Component {
     }).start();
   };
 
+  handleShowPress = (slug, background) => {
+    const {fetchShowData, setShowBanner} = this.props;
+    setShowBanner(background);
+    fetchShowData(slug, background);
+  };
+
   render() {
     const {isFocusedGenre, focusedGenre, isFocusedShow, focusedShow} =
       this.state;
@@ -119,6 +125,7 @@ export default class CategoriesComponent extends React.Component {
           {showsToDisplay.map((show, index) => {
             const imageURL = show.images.image;
             const showName = show.title_name;
+            const slug = show.slug;
             const isShowInFirstRow = index < 3;
             const isShowInFirstColumn = !(index % 3);
             const needDownFocus =
@@ -150,6 +157,7 @@ export default class CategoriesComponent extends React.Component {
                 ref={ref => (this[`Show${index}`] = ref)}
                 style={styles.showBlock}
                 onBlur={this.handleBlur}
+                onPress={this.handleShowPress.bind(this, slug, imageURL)}
                 onFocus={this.handleShowFocus.bind(this, showName)}>
                 <Animated.Image
                   source={{uri: imageURL}}

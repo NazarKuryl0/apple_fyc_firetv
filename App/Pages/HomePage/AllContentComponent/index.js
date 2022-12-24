@@ -49,11 +49,18 @@ export default class AllContent extends React.Component {
     }).start();
   };
 
+  handleShowPress = (slug, background) => {
+    const {fetchShowData, setShowBanner} = this.props;
+    setShowBanner(background);
+    fetchShowData(slug, background);
+  };
+
   renderItem = ({item, index}) => {
     const {focusedShow} = this.props;
 
     const source = item.images.image;
     const name = item.title_name;
+    const slug = item.slug;
     const showIndex = item.index;
 
     const cardScale = SCALE_VALUE.interpolate({
@@ -68,6 +75,7 @@ export default class AllContent extends React.Component {
         activeOpacity={1}
         ref={ref => (this[`Show${showIndex}`] = ref)}
         onBlur={this.handleBlur}
+        onPress={this.handleShowPress.bind(this, slug, source)}
         onFocus={this.handleItemFocus.bind(this, name)}
         style={styles.itemBlock}>
         <Animated.Image
