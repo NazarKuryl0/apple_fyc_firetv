@@ -13,16 +13,25 @@ export default class Header extends React.Component {
     focusedItem: ALL,
   };
 
+  componentDidMount() {
+    const {changeSelectedHeaderItemRef} = this.props;
+    changeSelectedHeaderItemRef(this[ALL]);
+  }
+
   handleItemFocus = item => {
-    const {changeIsFocusedHeaderItemValue} = this.props;
-    changeIsFocusedHeaderItemValue(true);
+    const {changeFocusedShow} = this.props;
+    changeFocusedShow(null);
     this.setState({focusedItem: item});
   };
 
   render() {
     const {focusedItem} = this.state;
-    const {isFYCContent, onPress, selectedHeaderItem, isFocusedHeaderItem} =
-      this.props;
+    const {
+      isFYCContent,
+      handleHeaderItemPress,
+      selectedHeaderItem,
+      focusedShow,
+    } = this.props;
 
     return (
       <View style={styles.root}>
@@ -33,19 +42,17 @@ export default class Header extends React.Component {
         )}
         <View style={styles.centerBlock}>
           {items.map(item => {
-            const needFocusedStyles =
-              focusedItem === item && isFocusedHeaderItem;
+            const needFocusedStyles = focusedItem === item && !focusedShow;
             const needActiveStyles =
               selectedHeaderItem === item &&
-              (!isFocusedHeaderItem ||
-                (isFocusedHeaderItem && focusedItem !== item));
+              (focusedShow || (!focusedShow && focusedItem !== item));
             return (
               <TouchableOpacity
                 key={item}
                 activeOpacity={1}
                 ref={ref => (this[item] = ref)}
                 hasTVPreferredFocus={item === ALL}
-                onPress={onPress.bind(this, item)}
+                onPress={handleHeaderItemPress.bind(this, item)}
                 onFocus={this.handleItemFocus.bind(this, item)}
                 style={[
                   styles.centerItem,

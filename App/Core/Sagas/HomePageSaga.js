@@ -42,9 +42,23 @@ export function* fetchHomePageData() {
         return a.name < b.name ? -1 : 1;
       }
     });
+    const dataToDisplayWithIndexing = dataToDisplay.map(
+      (category, categoryIndex) => {
+        const contentWithIndex = category.content.map((item, index) => {
+          return {
+            ...item,
+            index: `${categoryIndex}${index}`,
+          };
+        });
+        return {
+          ...category,
+          content: contentWithIndex,
+        };
+      },
+    );
 
     let allContent = [];
-    dataToDisplay.forEach(item => {
+    dataToDisplayWithIndexing.forEach(item => {
       item.content.forEach(show => {
         allContent.push(show);
       });
@@ -71,7 +85,7 @@ export function* fetchHomePageData() {
     yield put({
       type: FETCH_HOME_PAGE_DATA_SUCCESS,
       payload: {
-        dataToDisplay,
+        dataToDisplayWithIndexing,
         dataToDisplayWithGenres,
       },
     });

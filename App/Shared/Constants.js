@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, Animated} from 'react-native';
 
 export const FYC = 'FYC';
 export const PRESS = 'PRESS';
@@ -15,6 +15,7 @@ export const BUTTON = 'button';
 export const WATCH_NOW = 'Watch Now';
 export const ANIMATION_DURATION = 150;
 export const ALL_RIGHTS_RESERVER = `Copyright ${'\u00A9'} ${new Date().getFullYear()} Apple Inc. All rights reserved.`;
+export const SCALE_VALUE = new Animated.Value(0);
 
 export const SWITCH_ENV_CODE = 'switchENV';
 export const INT = 'INT';

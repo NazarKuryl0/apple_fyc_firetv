@@ -1,28 +1,42 @@
 import {StyleSheet} from 'react-native';
 
 import {Colors} from '../../../Shared';
+import {WIDTH} from '../../../Shared/Constants';
 
-export const itemWidth = 205;
+export const imageWidth = 195;
+const itemWidth = 205;
 
 export const styles = StyleSheet.create({
-  itemBlock: {
-    width: itemWidth,
-    height: (itemWidth * 9) / 16 + 40,
-    marginRight: 20,
-    marginBottom: 10,
+  banner: {
+    width: WIDTH,
+    height: 180,
   },
-  itemImage: {
-    width: '100%',
-    height: (itemWidth * 9) / 16,
-    borderRadius: 10,
-  },
-  whiteText: {
-    color: Colors.white,
+  mainBlock: {
+    marginHorizontal: 40,
   },
   boldText: {
     fontWeight: 'bold',
   },
+  whiteText: {
+    color: Colors.white,
+  },
   centerText: {
     textAlign: 'center',
+  },
+  itemBlock: {
+    width: itemWidth,
+    height: (itemWidth * 9) / 16 + 20,
+    marginRight: 20,
+    marginBottom: 10,
+    paddingTop: 10,
+    alignItems: 'center',
+  },
+  lastItemBlock: {
+    marginRight: 0,
+  },
+  itemImage: {
+    width: imageWidth,
+    height: (imageWidth * 9) / 16,
+    borderRadius: 10,
   },
 });

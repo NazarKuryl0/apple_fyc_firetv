@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
     case FETCH_HOME_PAGE_DATA_SUCCESS:
       return {
         ...state,
-        content: action.payload.dataToDisplay,
+        content: action.payload.dataToDisplayWithIndexing,
         contentWithGenres: action.payload.dataToDisplayWithGenres,
         fetchHomePageDataError: null,
       };

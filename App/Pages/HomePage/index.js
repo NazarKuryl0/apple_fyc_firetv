@@ -8,10 +8,13 @@ import {ALL} from '../../Shared/Constants';
 import Header from './Header';
 import AllContent from './AllContent';
 
+import {styles} from './styles';
+
 class HomePage extends React.Component {
   state = {
     selectedHeaderItem: ALL,
-    isFocusedHeaderItem: true,
+    selectedHeaderItemRef: null,
+    focusedShow: null,
   };
 
   componentDidMount() {
@@ -23,27 +26,43 @@ class HomePage extends React.Component {
     this.setState({selectedHeaderItem: item});
   };
 
-  changeIsFocusedHeaderItemValue = value => {
-    this.setState({isFocusedHeaderItem: value});
+  changeFocusedShow = value => {
+    this.setState({focusedShow: value});
+  };
+
+  changeSelectedHeaderItemRef = value => {
+    this.setState({selectedHeaderItemRef: value});
   };
 
   render() {
-    const {selectedHeaderItem, isFocusedHeaderItem} = this.state;
+    const {
+      selectedHeaderItem,
+      isFocusedHeaderItem,
+      focusedShow,
+      selectedHeaderItemRef,
+    } = this.state;
     const {isFYCContent, content} = this.props;
     return (
-      <ScrollView style={{backgroundColor: 'black'}}>
+      <ScrollView
+        style={styles.root}
+        showsVerticalScrollIndicator={false}
+        fadingEdgeLength={100}>
         <Header
           isFYCContent={isFYCContent}
           isFocusedHeaderItem={isFocusedHeaderItem}
           selectedHeaderItem={selectedHeaderItem}
-          onPress={this.handleHeaderItemPress}
-          changeIsFocusedHeaderItemValue={this.changeIsFocusedHeaderItemValue}
+          focusedShow={focusedShow}
+          handleHeaderItemPress={this.handleHeaderItemPress}
+          changeFocusedShow={this.changeFocusedShow}
+          changeSelectedHeaderItemRef={this.changeSelectedHeaderItemRef}
         />
         {selectedHeaderItem === ALL && !!content?.length && (
           <AllContent
             content={content}
+            selectedHeaderItemRef={selectedHeaderItemRef}
+            focusedShow={focusedShow}
             isFocusedHeaderItem={isFocusedHeaderItem}
-            changeIsFocusedHeaderItemValue={this.changeIsFocusedHeaderItemValue}
+            changeFocusedShow={this.changeFocusedShow}
           />
         )}
       </ScrollView>
