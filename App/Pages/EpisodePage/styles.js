@@ -3,13 +3,23 @@ import {StyleSheet} from 'react-native';
 import {WIDTH, HEIGHT} from '../../Shared/Constants';
 
 export const styles = StyleSheet.create({
-  videoBlock: {
+  root: {
+    aspectRatio: WIDTH / HEIGHT,
     width: WIDTH,
     height: HEIGHT,
-    minWidth: WIDTH,
-    minHeight: HEIGHT,
-    maxHeight: HEIGHT,
-    maxWidth: WIDTH,
+    minwidth: WIDTH,
+    minheight: HEIGHT,
+    maxwidth: WIDTH,
+    maxheight: HEIGHT,
+  },
+  videoBlock: {
+    aspectRatio: WIDTH / HEIGHT,
+    width: WIDTH,
+    height: HEIGHT,
+    minwidth: WIDTH,
+    minheight: HEIGHT,
+    maxwidth: WIDTH,
+    maxheight: HEIGHT,
   },
   wmBlock: {
     position: 'absolute',
