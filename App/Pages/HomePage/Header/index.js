@@ -33,6 +33,7 @@ export default class Header extends React.Component {
       selectedHeaderItem,
       focusedGenreRef,
       isFocusedHeaderItem,
+      focusedFAQItemRef,
     } = this.props;
 
     return (
@@ -54,7 +55,8 @@ export default class Header extends React.Component {
                 ref={ref => (this[item] = ref)}
                 hasTVPreferredFocus={item === ALL}
                 nextFocusDown={
-                  focusedGenreRef && findNodeHandle(focusedGenreRef)
+                  (focusedGenreRef && findNodeHandle(focusedGenreRef)) ||
+                  (focusedFAQItemRef && findNodeHandle(focusedFAQItemRef))
                 }
                 onPress={handleHeaderItemPress.bind(this, item, this[item])}
                 onFocus={this.handleItemFocus.bind(this, item)}

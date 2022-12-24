@@ -3,11 +3,12 @@ import {ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 
 import {FETCH_HOME_PAGE_DATA} from '../../Core/Store/HomePage/Actions';
-import {ALL, CATEGORY} from '../../Shared/Constants';
+import {ALL, CATEGORY, FAQ, FAQ_FYC, FAQ_PRESS} from '../../Shared/Constants';
 
 import Header from './Header';
-import AllContent from './AllContent';
-import CategoriesContent from './CategoriesContent';
+import AllContent from './AllContentComponent';
+import CategoriesContent from './CategoriesContentComponent';
+import FAQComponent from './FAQComponent';
 
 import {styles} from './styles';
 
@@ -16,6 +17,7 @@ class HomePage extends React.Component {
     selectedHeaderItem: ALL,
     selectedHeaderItemRef: null,
     focusedGenreRef: null,
+    focusedFAQItemRef: null,
     isFocusedHeaderItem: true,
     focusedShow: null,
   };
@@ -45,12 +47,17 @@ class HomePage extends React.Component {
     this.setState({focusedGenreRef: ref});
   };
 
+  changeFAQItemRef = ref => {
+    this.setState({focusedFAQItemRef: ref});
+  };
+
   render() {
     const {
       selectedHeaderItem,
       isFocusedHeaderItem,
       focusedShow,
       focusedGenreRef,
+      focusedFAQItemRef,
       selectedHeaderItemRef,
     } = this.state;
     const {isFYCContent, content, contentWithGenres} = this.props;
@@ -64,6 +71,7 @@ class HomePage extends React.Component {
           isFocusedHeaderItem={isFocusedHeaderItem}
           selectedHeaderItem={selectedHeaderItem}
           focusedGenreRef={focusedGenreRef}
+          focusedFAQItemRef={focusedFAQItemRef}
           handleHeaderItemPress={this.handleHeaderItemPress}
           changeFocusedShow={this.changeFocusedShow}
           changeSelectedHeaderItemRef={this.changeSelectedHeaderItemRef}
@@ -86,6 +94,15 @@ class HomePage extends React.Component {
             focusedGenreRef={focusedGenreRef}
             changeIsFocusedHeaderItemValue={this.changeIsFocusedHeaderItemValue}
             changeFocusedGenreRef={this.changeFocusedGenreRef}
+          />
+        )}
+        {selectedHeaderItem === FAQ && (
+          <FAQComponent
+            content={isFYCContent ? FAQ_FYC : FAQ_PRESS}
+            isFocusedHeaderItem={isFocusedHeaderItem}
+            selectedHeaderItemRef={selectedHeaderItemRef}
+            changeIsFocusedHeaderItemValue={this.changeIsFocusedHeaderItemValue}
+            changeFAQItemRef={this.changeFAQItemRef}
           />
         )}
       </ScrollView>
