@@ -19,8 +19,9 @@ export default class Header extends React.Component {
   }
 
   handleItemFocus = item => {
-    const {changeFocusedShow} = this.props;
+    const {changeFocusedShow, changeIsFocusedHeaderItemValue} = this.props;
     changeFocusedShow(null);
+    changeIsFocusedHeaderItemValue(true);
     this.setState({focusedItem: item});
   };
 
@@ -30,7 +31,8 @@ export default class Header extends React.Component {
       isFYCContent,
       handleHeaderItemPress,
       selectedHeaderItem,
-      focusedShow,
+      focusedGenreRef,
+      isFocusedHeaderItem,
     } = this.props;
 
     return (
@@ -42,30 +44,32 @@ export default class Header extends React.Component {
         )}
         <View style={styles.centerBlock}>
           {items.map(item => {
-            const needFocusedStyles = focusedItem === item && !focusedShow;
-            const needActiveStyles =
-              selectedHeaderItem === item &&
-              (focusedShow || (!focusedShow && focusedItem !== item));
+            const needFocusedStyles =
+              isFocusedHeaderItem && focusedItem === item;
+            const needActiveStyles = selectedHeaderItem === item;
             return (
               <TouchableOpacity
                 key={item}
                 activeOpacity={1}
                 ref={ref => (this[item] = ref)}
                 hasTVPreferredFocus={item === ALL}
-                onPress={handleHeaderItemPress.bind(this, item)}
+                nextFocusDown={
+                  focusedGenreRef && findNodeHandle(focusedGenreRef)
+                }
+                onPress={handleHeaderItemPress.bind(this, item, this[item])}
                 onFocus={this.handleItemFocus.bind(this, item)}
                 style={[
                   styles.centerItem,
-                  needFocusedStyles && styles.centerItemFocused,
                   needActiveStyles && styles.centerItemActive,
+                  needFocusedStyles && styles.centerItemFocused,
                 ]}>
                 <Text
                   accessible={false}
                   style={[
                     styles.whiteText,
                     styles.boldText,
-                    needFocusedStyles && styles.focusedText,
                     needActiveStyles && styles.activeText,
+                    needFocusedStyles && styles.focusedText,
                   ]}>
                   {item}
                 </Text>

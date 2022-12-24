@@ -28,8 +28,9 @@ export default class AllContent extends React.Component {
   }
 
   handleItemFocus = item => {
-    const {changeFocusedShow} = this.props;
+    const {changeFocusedShow, changeIsFocusedHeaderItemValue} = this.props;
     changeFocusedShow(item);
+    changeIsFocusedHeaderItemValue(false);
 
     Animated.timing(SCALE_VALUE, {
       toValue: 1,
