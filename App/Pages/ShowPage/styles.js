@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   logoBlock: {
     width: '100%',
     paddingTop: 30,
-    paddingRight: 10,
+    paddingRight: 30,
     alignItems: 'flex-end',
   },
   logo: {
@@ -31,8 +31,8 @@ export const styles = StyleSheet.create({
   },
   showDescriptionBlock: {
     width: '100%',
-    marginTop: 300,
-    padding: 20,
+    marginTop: 320,
+    paddingHorizontal: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -66,6 +66,7 @@ export const styles = StyleSheet.create({
   },
   episodesBlock: {
     paddingHorizontal: 20,
+    margin:20,
   },
   seasonsBlock: {
     flexDirection: 'row',
