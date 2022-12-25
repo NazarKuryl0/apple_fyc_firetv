@@ -6,10 +6,6 @@ export const styles = StyleSheet.create({
   videoBlock: {
     width: WIDTH,
     height: HEIGHT,
-    minWidth: WIDTH,
-    minHeight: HEIGHT,
-    maxHeight: HEIGHT,
-    maxWidth: WIDTH,
   },
   wmBlock: {
     position: 'absolute',
