@@ -21,6 +21,7 @@ class EpsiodePage extends React.Component {
       <View>
         {!!videoSource && (
           <Video
+            resizeMode="contain"
             selectedVideoTrack={{
               type: 'resolution',
               value: 720,
